@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Author;
+use Illuminate\Http\Request;
+
+class AuthorController extends Controller
+{
+    public function index()
+    {
+        $authors = Author::with('books')->paginate(15);
+        return view('authors.index', compact('authors'));
+    }
+
+    public function show(Author $author)
+    {
+        $author->load('books');
+        return view('authors.show', compact('author'));
+    }
+
+    public function create()
+    {
+        return view('authors.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255|unique:authors',
+            'biographie' => 'nullable|string',
+        ]);
+
+        Author::create($validated);
+        return redirect()->route('authors.index')->with('success', 'Auteur créé avec succès.');
+    }
+
+    public function edit(Author $author)
+    {
+        return view('authors.edit', compact('author'));
+    }
+
+    public function update(Request $request, Author $author)
+    {
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255|unique:authors,nom,' . $author->id_auteur . ',id_auteur',
+            'biographie' => 'nullable|string',
+        ]);
+
+        $author->update($validated);
+        return redirect()->route('authors.show', $author)->with('success', 'Auteur mis à jour avec succès.');
+    }
+
+    public function destroy(Author $author)
+    {
+        $author->delete();
+        return redirect()->route('authors.index')->with('success', 'Auteur supprimé avec succès.');
+    }
+}
