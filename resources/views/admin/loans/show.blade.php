@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Détails de l\'Emprunt')
+@section('title', 'Détails de l\'Emprunt - Admin')
 
 @section('content')
 <div class="row mb-4">
@@ -20,7 +20,7 @@
                     <div class="col-md-6">
                         <p>
                             <strong>Livre:</strong><br>
-                            <a href="{{ route('books.show', $loan->exemplaire->book) }}">
+                            <a href="{{ route('admin.books.edit', $loan->exemplaire->book) }}">
                                 {{ $loan->exemplaire->book->titre }}
                             </a>
                         </p>
@@ -30,7 +30,9 @@
                         </p>
                         <p>
                             <strong>Membre:</strong><br>
-                            {{ $loan->membre->getFullName() }}
+                            <a href="{{ route('admin.members.show', $loan->membre) }}">
+                                {{ $loan->membre->getFullName() }}
+                            </a>
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -101,8 +103,8 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
-                <a href="{{ route('loans.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
-                    <i class="fas fa-arrow-left"></i> Retour aux Emprunts
+                <a href="{{ route('admin.loans.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
+                    <i class="fas fa-arrow-left"></i> Retour
                 </a>
             </div>
         </div>

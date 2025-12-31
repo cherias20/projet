@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Gestion des Auteurs')
 
@@ -11,9 +11,9 @@
         <p class="page-subtitle">Gérez les auteurs de la bibliothèque</p>
     </div>
     <div class="col-auto">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAuthorModal">
+        <a href="{{ route('admin.authors.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Ajouter un Auteur
-        </button>
+        </a>
     </div>
 </div>
 
@@ -27,31 +27,33 @@
                 <tr>
                     <th>#</th>
                     <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Nationalité</th>
-                    <th>Nombre de livres</th>
+                    <th colspan="2">Biographie</th>
+                    <th>Livres</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse(DB::table('auteurs')->get() as $author)
+                @forelse($authors as $author)
                     <tr>
                         <td>{{ $author->id_auteur }}</td>
-                        <td><strong>{{ $author->nom_auteur }}</strong></td>
-                        <td>{{ $author->prenom_auteur ?? 'N/A' }}</td>
-                        <td>{{ $author->nationalite ?? 'N/A' }}</td>
+                        <td><strong>{{ $author->nom }}</strong></td>
+                        <td colspan="2">{{ $author->biographie ?? 'N/A' }}</td>
                         <td>
                             <span class="badge bg-info">
-                                {{ DB::table('book_author')->where('id_auteur', $author->id_auteur)->count() }}
+                                {{ $author->books->count() }}
                             </span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editAuthorModal">
+                            <a href="{{ route('admin.authors.edit', $author) }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-edit"></i>
-                            </button>
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i>
                             </a>
+                            <form method="POST" action="{{ route('admin.authors.destroy', $author) }}" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty
@@ -63,45 +65,6 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
-</div>
-
-<!-- Modal Ajouter Auteur -->
-<div class="modal fade" id="addAuthorModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajouter un Auteur</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="#">
-                @csrf
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nom</label>
-                            <input type="text" class="form-control" name="nom_auteur" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Prénom</label>
-                            <input type="text" class="form-control" name="prenom_auteur">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nationalité</label>
-                        <input type="text" class="form-control" name="nationalite">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Biographie</label>
-                        <textarea class="form-control" name="biographie" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Ajouter</button>
-                </div>
-            </form>
-        </div>
     </div>
 </div>
 @endsection

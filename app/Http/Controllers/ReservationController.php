@@ -11,23 +11,42 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        $reservations = Reservation::with(['membre', 'book'])
-            ->orderBy('position')
-            ->paginate(20);
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            // Vue admin - toutes les réservations
+            $reservations = Reservation::with(['membre', 'book'])
+                ->orderBy('position')
+                ->paginate(20);
+            return view('admin.reservations.index', compact('reservations'));
+        }
+        
+        // Vue membre - réservations du membre connecté
+        if (auth()->check()) {
+            $membre = auth()->user()->membre;
+            $reservations = $membre->reservations()
+                ->with('book')
+                ->orderBy('position')
+                ->paginate(20);
+        } else {
+            $reservations = collect();
+        }
+        
         return view('reservations.index', compact('reservations'));
     }
 
     public function show(Reservation $reservation)
     {
-        $reservation->load(['membre', 'book.exemplaires']);
+        $reservation->load(['membre', 'book']);
+        
+        // Afficher la vue admin ou membre selon le rôle
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return view('admin.reservations.show', compact('reservation'));
+        }
         return view('reservations.show', compact('reservation'));
     }
-
-    public function create()
     {
         $books = Book::with('exemplaires')->get();
         $membres = Membre::where('statut', 'actif')->get();
-        return view('reservations.create', compact('books', 'membres'));
+        return view('admin.reservations.create', compact('books', 'membres'));
     }
 
     public function store(Request $request)
@@ -71,7 +90,7 @@ class ReservationController extends Controller
             'id_membre' => $validated['id_membre'],
         ]);
 
-        return redirect()->route('reservations.show', $reservation)
+        return redirect()->route('admin.reservations.index')
             ->with('success', 'Réservation créée avec succès.');
     }
 

@@ -10,6 +10,11 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = Author::with('books')->paginate(15);
+        
+        // Afficher la vue admin ou membre selon le rôle
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return view('admin.authors.index', compact('authors'));
+        }
         return view('authors.index', compact('authors'));
     }
 
@@ -18,10 +23,8 @@ class AuthorController extends Controller
         $author->load('books');
         return view('authors.show', compact('author'));
     }
-
-    public function create()
     {
-        return view('authors.create');
+        return view('admin.authors.create');
     }
 
     public function store(Request $request)
@@ -32,12 +35,12 @@ class AuthorController extends Controller
         ]);
 
         Author::create($validated);
-        return redirect()->route('authors.index')->with('success', 'Auteur créé avec succès.');
+        return redirect()->route('admin.authors.index')->with('success', 'Auteur créé avec succès.');
     }
 
     public function edit(Author $author)
     {
-        return view('authors.edit', compact('author'));
+        return view('admin.authors.edit', compact('author'));
     }
 
     public function update(Request $request, Author $author)
@@ -48,12 +51,12 @@ class AuthorController extends Controller
         ]);
 
         $author->update($validated);
-        return redirect()->route('authors.show', $author)->with('success', 'Auteur mis à jour avec succès.');
+        return redirect()->route('admin.authors.index')->with('success', 'Auteur mis à jour avec succès.');
     }
 
     public function destroy(Author $author)
     {
         $author->delete();
-        return redirect()->route('authors.index')->with('success', 'Auteur supprimé avec succès.');
+        return redirect()->route('admin.authors.index')->with('success', 'Auteur supprimé avec succès.');
     }
 }

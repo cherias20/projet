@@ -217,17 +217,21 @@
     <nav class="navbar navbar-expand-lg navbar-app">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
-                <i class="fas fa-book-open"></i> Bibliothèque Admin
+                <i class="fas fa-book-open"></i> Bibliothèque
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-pen-fancy"></i> Auteurs
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.authors.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.authors.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
+                        </ul>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -235,36 +239,45 @@
                             <i class="fas fa-book"></i> Livres
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('books.index') }}"><i class="fas fa-list"></i> Liste des Livres</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-plus"></i> Ajouter un Livre</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.books.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.books.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
                         </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('authors.index') }}">
-                            <i class="fas fa-pen-fancy"></i> Auteurs
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('loans.index') }}">
-                            <i class="fas fa-exchange-alt"></i> Emprunts
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reservations.index') }}">
-                            <i class="fas fa-bookmark"></i> Réservations
-                        </a>
                     </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-cog"></i> Configuration
+                            <i class="fas fa-tag"></i> Genres
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('genres.index') }}"><i class="fas fa-tag"></i> Genres</a></li>
-                            <li><a class="dropdown-item" href="{{ route('members.index') }}"><i class="fas fa-users"></i> Membres</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.genres.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.genres.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-exchange-alt"></i> Emprunts
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('loans.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-users"></i> Membres
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.members.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-bookmark"></i> Réservations
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('reservations.index') }}"><i class="fas fa-list"></i> Liste</a></li>
                         </ul>
                     </li>
 

@@ -10,18 +10,12 @@ class MemberController extends Controller
     public function index()
     {
         $membres = Membre::paginate(15);
-        return view('members.index', compact('membres'));
-    }
-
-    public function show(Membre $membre)
-    {
-        $membre->load(['emprunts.exemplaire.book', 'reservations.book', 'penalites']);
-        return view('members.show', compact('membre'));
+        return view('admin.members.index', compact('membres'));
     }
 
     public function create()
     {
-        return view('members.create');
+        return view('admin.members.create');
     }
 
     public function store(Request $request)
@@ -41,12 +35,12 @@ class MemberController extends Controller
         $validated['statut'] = 'actif';
 
         Membre::create($validated);
-        return redirect()->route('members.index')->with('success', 'Membre créé avec succès.');
+        return redirect()->route('admin.members.index')->with('success', 'Membre créé avec succès.');
     }
 
     public function edit(Membre $membre)
     {
-        return view('members.edit', compact('membre'));
+        return view('admin.members.edit', compact('membre'));
     }
 
     public function update(Request $request, Membre $membre)
@@ -64,7 +58,7 @@ class MemberController extends Controller
         ]);
 
         $membre->update($validated);
-        return redirect()->route('members.show', $membre)->with('success', 'Membre mis à jour avec succès.');
+        return redirect()->route('admin.members.index')->with('success', 'Membre mis à jour avec succès.');
     }
 
     public function destroy(Membre $membre)
@@ -75,7 +69,7 @@ class MemberController extends Controller
         }
 
         $membre->delete();
-        return redirect()->route('members.index')->with('success', 'Membre supprimé avec succès.');
+        return redirect()->route('admin.members.index')->with('success', 'Membre supprimé avec succès.');
     }
 
     public function suspend(Membre $membre)

@@ -13,15 +13,36 @@ class LoanController extends Controller
 {
     public function index()
     {
-        $loans = Loan::with(['membre', 'exemplaire.book'])
-            ->orderBy('date_emprunt', 'desc')
-            ->paginate(20);
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            // Vue admin - tous les emprunts
+            $loans = Loan::with(['membre', 'exemplaire.book'])
+                ->orderBy('date_emprunt', 'desc')
+                ->paginate(20);
+            return view('admin.loans.index', compact('loans'));
+        }
+        
+        // Vue membre - emprunts du membre connecté
+        if (auth()->check()) {
+            $membre = auth()->user()->membre;
+            $loans = $membre->emprunts()
+                ->with('exemplaire.book')
+                ->orderBy('date_emprunt', 'desc')
+                ->paginate(20);
+        } else {
+            $loans = collect();
+        }
+        
         return view('loans.index', compact('loans'));
     }
 
     public function show(Loan $loan)
     {
-        $loan->load(['membre', 'exemplaire.book', 'penalites']);
+        $loan->load(['membre', 'exemplaire.book']);
+        
+        // Afficher la vue admin ou membre selon le rôle
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return view('admin.loans.show', compact('loan'));
+        }
         return view('loans.show', compact('loan'));
     }
 
@@ -31,7 +52,7 @@ class LoanController extends Controller
         $exemplaires = Exemplaire::with('book')
             ->where('statut', 'disponible')
             ->get();
-        return view('loans.create', compact('membres', 'exemplaires'));
+        return view('admin.loans.create', compact('membres', 'exemplaires'));
     }
 
     public function store(Request $request)
@@ -69,7 +90,7 @@ class LoanController extends Controller
         $exemplaire->statut = 'emprunté';
         $exemplaire->save();
 
-        return redirect()->route('loans.show', $loan)
+        return redirect()->route('admin.loans.index')
             ->with('success', 'Emprunt enregistré avec succès.');
     }
 
@@ -94,8 +115,8 @@ class LoanController extends Controller
             Penalty::createFromOverdueLoan($loan);
         }
 
-        return redirect()->route('loans.show', $loan)
-            ->with('success', 'Livre retourné avec succès.');
+        return redirect()->route('admin.loans.index')
+            ->with('success', 'Livre retourné avec succès');
     }
 
     public function getOverdueLoans()

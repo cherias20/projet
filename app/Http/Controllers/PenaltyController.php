@@ -11,15 +11,36 @@ class PenaltyController extends Controller
 {
     public function index()
     {
-        $penalties = Penalty::with(['membre', 'loan.exemplaire.book'])
-            ->orderBy('date_calcul', 'desc')
-            ->paginate(20);
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            // Vue admin - toutes les pénalités
+            $penalties = Penalty::with(['membre', 'loan.exemplaire.book'])
+                ->orderBy('date_calcul', 'desc')
+                ->paginate(20);
+            return view('admin.penalties.index', compact('penalties'));
+        }
+        
+        // Vue membre - pénalités du membre connecté
+        if (auth()->check()) {
+            $membre = auth()->user()->membre;
+            $penalties = $membre->penalites()
+                ->with('loan.exemplaire.book')
+                ->orderBy('date_calcul', 'desc')
+                ->paginate(20);
+        } else {
+            $penalties = collect();
+        }
+        
         return view('penalties.index', compact('penalties'));
     }
 
     public function show(Penalty $penalty)
     {
         $penalty->load(['membre', 'loan.exemplaire.book']);
+        
+        // Afficher la vue admin ou membre selon le rôle
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return view('admin.penalties.show', compact('penalty'));
+        }
         return view('penalties.show', compact('penalty'));
     }
 

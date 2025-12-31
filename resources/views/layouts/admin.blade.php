@@ -206,7 +206,7 @@
     <!-- Navbar Moderne -->
     <nav class="navbar navbar-expand-lg navbar-app">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('home') }}">
+            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
                 <i class="fas fa-book-open"></i> Bibliothèque
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -214,97 +214,93 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('books.index') }}">
-                            <i class="fas fa-book"></i> Livres
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('authors.index') }}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-pen-fancy"></i> Auteurs
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.authors.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.authors.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
+                        </ul>
                     </li>
-                    
-                    @auth
-                        @if(auth()->user()->role === 'admin')
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                    <i class="fas fa-cog"></i> Admin
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.books.index') }}"><i class="fas fa-book"></i> Gestion des Livres</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.authors.index') }}"><i class="fas fa-pen-fancy"></i> Gestion des Auteurs</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.genres.index') }}"><i class="fas fa-tag"></i> Gestion des Genres</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.members.index') }}"><i class="fas fa-users"></i> Gestion des Membres</a></li>
-                                </ul>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-book"></i> Livres
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.books.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.books.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-tag"></i> Genres
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.genres.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.genres.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-exchange-alt"></i> Emprunts
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('loans.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-users"></i> Membres
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.members.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-bookmark"></i> Réservations
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('reservations.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Avatar Dropdown -->
+                    <li class="nav-item dropdown">
+                        <button class="avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ session('membre_nom', 'Admin') }}">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <span class="dropdown-item-text">
+                                    <strong>{{ session('membre_nom', 'Admin') }}</strong><br>
+                                    <small class="text-muted">{{ session('membre_email', 'admin@exemple.com') }}</small>
+                                </span>
                             </li>
-                        @endif
-                        
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                <i class="fas fa-exchange-alt"></i> Emprunts
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('loans.index') }}"><i class="fas fa-list"></i> Mes emprunts</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                <i class="fas fa-bookmark"></i> Réservations
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('reservations.index') }}"><i class="fas fa-list"></i> Mes réservations</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                <i class="fas fa-exclamation-circle"></i> Pénalités
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('penalties.index') }}"><i class="fas fa-list"></i> Mes pénalités</a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Avatar Dropdown -->
-                        <li class="nav-item dropdown">
-                            <button class="avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ Auth::user()->name }}">
-                                <i class="fas fa-user"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <span class="dropdown-item-text">
-                                        <strong>{{ Auth::user()->name }}</strong><br>
-                                        <small class="text-muted">{{ Auth::user()->email }}</small>
-                                    </span>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}" 
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="fas fa-sign-out-alt"></i> Déconnexion
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt"></i> Connexion
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="fas fa-user-plus"></i> Inscription
-                            </a>
-                        </li>
-                    @endauth
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('books.index') }}">
+                                    <i class="fas fa-arrow-left"></i> Retour à la Bibliothèque
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ route('logout') }}" 
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PenaltyController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -91,6 +92,9 @@ Route::middleware(['auth'])->group(function () {
     // ========================================================================
     
     Route::middleware(['admin'])->prefix('admin/books')->name('admin.books.')->group(function () {
+        // Liste de tous les livres
+        Route::get('/', [BookController::class, 'index'])->name('index');
+        
         // Formulaire pour créer un nouveau livre
         Route::get('/create', [BookController::class, 'create'])->name('create');
         
@@ -112,6 +116,9 @@ Route::middleware(['auth'])->group(function () {
     // ========================================================================
     
     Route::middleware(['admin'])->prefix('admin/authors')->name('admin.authors.')->group(function () {
+        // Liste de tous les auteurs
+        Route::get('/', [AuthorController::class, 'index'])->name('index');
+        
         // Formulaire pour créer un nouvel auteur
         Route::get('/create', [AuthorController::class, 'create'])->name('create');
         
@@ -128,100 +135,81 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{author}', [AuthorController::class, 'destroy'])->name('destroy');
     });
 
-    // ========================================================================
-    // GESTION DES EMPRUNTS (Admin + Membres)
-    // ========================================================================
-    
-    Route::prefix('loans')->name('loans.')->group(function () {
-        // Liste de tous les emprunts (paginée)
+    Route::middleware(['admin'])->prefix('admin/loans')->name('admin.loans.')->group(function () {
+        // Liste de tous les emprunts
         Route::get('/', [LoanController::class, 'index'])->name('index');
         
         // Détails complets d'un emprunt
         Route::get('/{loan}', [LoanController::class, 'show'])->name('show');
         
-        // Emprunts d'un membre spécifique
-        Route::get('/member/{membre}', [LoanController::class, 'memberLoans'])->name('member');
+        // Formulaire pour créer un emprunt
+        Route::get('/create', [LoanController::class, 'create'])->name('create');
         
-        // ADMIN SEULEMENT - Créer/gérer emprunts
-        Route::middleware(['admin'])->group(function () {
-            // Formulaire pour créer un emprunt
-            Route::get('/create', [LoanController::class, 'create'])->name('create');
-            
-            // Enregistrer un emprunt
-            Route::post('/', [LoanController::class, 'store'])->name('store');
-            
-            // Liste des emprunts en retard
-            Route::get('/overdue', [LoanController::class, 'getOverdueLoans'])->name('overdue');
-        });
-
-        // Actions sur un emprunt (tous les utilisateurs auth)
-        // Renouveler un emprunt (max 3 fois)
-        Route::post('/{loan}/renew', [LoanController::class, 'renewLoan'])->name('renew');
+        // Enregistrer un emprunt
+        Route::post('/', [LoanController::class, 'store'])->name('store');
         
-        // Retourner un livre au système
-        Route::post('/{loan}/return', [LoanController::class, 'returnBook'])->name('return');
+        // Liste des emprunts en retard
+        Route::get('/overdue', [LoanController::class, 'getOverdueLoans'])->name('overdue');
     });
 
     // ========================================================================
-    // GESTION DES RÉSERVATIONS (Admin + Membres)
+    // ADMINISTRATION - GESTION DES RÉSERVATIONS (Admin seulement)
     // ========================================================================
     
-    Route::prefix('reservations')->name('reservations.')->group(function () {
+    Route::middleware(['admin'])->prefix('admin/reservations')->name('admin.reservations.')->group(function () {
         // Liste de toutes les réservations
         Route::get('/', [ReservationController::class, 'index'])->name('index');
         
         // Détails d'une réservation
         Route::get('/{reservation}', [ReservationController::class, 'show'])->name('show');
         
-        // Réservations d'un membre spécifique
-        Route::get('/member/{membre}', [ReservationController::class, 'memberReservations'])->name('member');
+        // Formulaire pour créer une réservation
+        Route::get('/create', [ReservationController::class, 'create'])->name('create');
         
-        // Réservations en attente pour un livre
-        Route::get('/book/{book}', [ReservationController::class, 'bookReservations'])->name('book');
-        
-        // ADMIN SEULEMENT - Créer des réservations
-        Route::middleware(['admin'])->group(function () {
-            // Formulaire pour créer une réservation
-            Route::get('/create', [ReservationController::class, 'create'])->name('create');
-            
-            // Enregistrer une réservation
-            Route::post('/', [ReservationController::class, 'store'])->name('store');
-        });
-
-        // Actions sur une réservation (tous les utilisateurs auth)
-        // Vérifier la disponibilité et notifier si possible
-        Route::post('/{reservation}/check', [ReservationController::class, 'checkAvailability'])->name('check');
-        
-        // Annuler une réservation
-        Route::post('/{reservation}/cancel', [ReservationController::class, 'cancel'])->name('cancel');
+        // Enregistrer une réservation
+        Route::post('/', [ReservationController::class, 'store'])->name('store');
     });
 
     // ========================================================================
-    // GESTION DES PÉNALITÉS (Admin + Membres)
+    // ADMINISTRATION - GESTION DES PÉNALITÉS (Admin seulement)
     // ========================================================================
     
-    Route::prefix('penalties')->name('penalties.')->group(function () {
+    Route::middleware(['admin'])->prefix('admin/penalties')->name('admin.penalties.')->group(function () {
         // Liste de toutes les pénalités
         Route::get('/', [PenaltyController::class, 'index'])->name('index');
         
         // Détails d'une pénalité
         Route::get('/{penalty}', [PenaltyController::class, 'show'])->name('show');
         
-        // Pénalités d'un membre spécifique
-        Route::get('/member/{membre}', [PenaltyController::class, 'memberPenalties'])->name('member');
+        // Liste des pénalités non payées
+        Route::get('/unpaid', [PenaltyController::class, 'getUnpaidPenalties'])->name('unpaid');
         
-        // Liste des pénalités non payées (Admin seulement)
-        Route::middleware(['admin'])->get('/unpaid', [PenaltyController::class, 'getUnpaidPenalties'])->name('unpaid');
-        
-        // Statistiques des pénalités (Admin seulement)
-        Route::middleware(['admin'])->get('/statistics', [PenaltyController::class, 'statistics'])->name('statistics');
-        
-        // Actions sur une pénalité (tous les utilisateurs auth)
-        // Marquer une pénalité comme payée
-        Route::post('/{penalty}/pay', [PenaltyController::class, 'markAsPaid'])->name('pay');
-        
-        // Remettre une pénalité (Admin seulement)
-        Route::middleware(['admin'])->post('/{penalty}/remit', [PenaltyController::class, 'remit'])->name('remit');
+        // Statistiques des pénalités
+        Route::get('/statistics', [PenaltyController::class, 'statistics'])->name('statistics');
+    });
+
+    // ========================================================================
+    // ADMINISTRATION - GESTION DES GENRES (Admin seulement)
+    // ========================================================================
+    
+    Route::middleware(['admin'])->prefix('admin/genres')->name('admin.genres.')->group(function () {
+        // Liste de tous les genres
+        Route::get('/', [GenreController::class, 'index'])->name('index');
+
+        // Formulaire pour créer un nouveau genre
+        Route::get('/create', [GenreController::class, 'create'])->name('create');
+
+        // Enregistrer un nouveau genre
+        Route::post('/', [GenreController::class, 'store'])->name('store');
+
+        // Formulaire pour éditer un genre
+        Route::get('/{genre}/edit', [GenreController::class, 'edit'])->name('edit');
+
+        // Mettre à jour un genre
+        Route::put('/{genre}', [GenreController::class, 'update'])->name('update');
+
+        // Supprimer un genre
+        Route::delete('/{genre}', [GenreController::class, 'destroy'])->name('destroy');
     });
 
     // ========================================================================
@@ -257,4 +245,75 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/{membre}/activate', [MemberController::class, 'activate'])->name('activate');
     });
 
+    // ========================================================================
+    // GESTION DES EMPRUNTS (Membres + Admin)
+    // ========================================================================
+    
+    Route::prefix('loans')->name('loans.')->group(function () {
+        // Liste des emprunts (admin = tous, membre = ses emprunts)
+        Route::get('/', [LoanController::class, 'index'])->name('index');
+        
+        // Détails complets d'un emprunt
+        Route::get('/{loan}', [LoanController::class, 'show'])->name('show');
+        
+        // Emprunts d'un membre spécifique
+        Route::get('/member/{membre}', [LoanController::class, 'memberLoans'])->name('member');
+        
+        // Actions sur un emprunt (tous les utilisateurs auth)
+        // Renouveler un emprunt (max 3 fois)
+        Route::post('/{loan}/renew', [LoanController::class, 'renewLoan'])->name('renew');
+        
+        // Retourner un livre au système
+        Route::post('/{loan}/return', [LoanController::class, 'returnBook'])->name('return');
+    });
+
+    // ========================================================================
+    // GESTION DES RÉSERVATIONS (Membres + Admin)
+    // ========================================================================
+    
+    Route::prefix('reservations')->name('reservations.')->group(function () {
+        // Liste des réservations (admin = tous, membre = ses réservations)
+        Route::get('/', [ReservationController::class, 'index'])->name('index');
+        
+        // Formulaire pour créer une réservation
+        Route::get('/create', [ReservationController::class, 'create'])->name('create');
+        
+        // Enregistrer une réservation
+        Route::post('/', [ReservationController::class, 'store'])->name('store');
+        
+        // Détails d'une réservation
+        Route::get('/{reservation}', [ReservationController::class, 'show'])->name('show');
+        
+        // Réservations d'un membre spécifique
+        Route::get('/member/{membre}', [ReservationController::class, 'memberReservations'])->name('member');
+        
+        // Réservations en attente pour un livre
+        Route::get('/book/{book}', [ReservationController::class, 'bookReservations'])->name('book');
+        
+        // Actions sur une réservation (tous les utilisateurs auth)
+        // Vérifier la disponibilité et notifier si possible
+        Route::post('/{reservation}/check', [ReservationController::class, 'checkAvailability'])->name('check');
+        
+        // Annuler une réservation
+        Route::post('/{reservation}/cancel', [ReservationController::class, 'cancel'])->name('cancel');
+    });
+
+    // ========================================================================
+    // GESTION DES PÉNALITÉS (Membres + Admin)
+    // ========================================================================
+    
+    Route::prefix('penalties')->name('penalties.')->group(function () {
+        // Liste des pénalités (admin = tous, membre = ses pénalités)
+        Route::get('/', [PenaltyController::class, 'index'])->name('index');
+        
+        // Détails d'une pénalité
+        Route::get('/{penalty}', [PenaltyController::class, 'show'])->name('show');
+        
+        // Pénalités d'un membre spécifique
+        Route::get('/member/{membre}', [PenaltyController::class, 'memberPenalties'])->name('member');
+        
+        // Actions sur une pénalité (tous les utilisateurs auth)
+        // Marquer une pénalité comme payée
+        Route::post('/{penalty}/pay', [PenaltyController::class, 'markAsPaid'])->name('pay');
+    });
 });

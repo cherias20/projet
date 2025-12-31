@@ -12,50 +12,54 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::with(['authors', 'genres', 'exemplaires'])->paginate(12);
+        
+        // Afficher la vue admin ou membre selon le rôle
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return view('admin.books.index', compact('books'));
+        }
         return view('books.index', compact('books'));
     }
 
     public function show(Book $book)
     {
         $book->load(['authors', 'genres', 'exemplaires']);
-        $availableCopies = $book->getAvailableCopiesCount();
-        return view('books.show', compact('book', 'availableCopies'));
+        return view('books.show', compact('book'));
     }
 
     public function search(Request $request)
     {
-        $query = Book::with(['authors', 'genres']);
+        $query = Book::query()->with(['authors', 'genres', 'exemplaires']);
 
         if ($request->has('titre') && $request->titre) {
-            $query->where('titre', 'like', "%{$request->titre}%")
-                  ->orWhere('resume', 'like', "%{$request->titre}%");
+            $query->where('titre', 'like', '%' . $request->titre . '%')
+                  ->orWhere('resume', 'like', '%' . $request->titre . '%');
         }
 
         if ($request->has('auteur') && $request->auteur) {
             $query->whereHas('authors', function ($q) {
-                $q->where('nom', 'like', "%{$request->auteur}%");
+                $q->where('nom', 'like', '%' . request('auteur') . '%');
             });
         }
 
         if ($request->has('genre') && $request->genre) {
             $query->whereHas('genres', function ($q) {
-                $q->where('nom', $request->genre);
+                $q->where('nom', 'like', '%' . request('genre') . '%');
             });
         }
 
         if ($request->has('editeur') && $request->editeur) {
-            $query->where('editeur', 'like', "%{$request->editeur}%");
+            $query->where('editeur', 'like', '%' . $request->editeur . '%');
         }
 
         $books = $query->paginate(12);
-        return view('books.search', compact('books'));
+        return view('books.index', compact('books'));
     }
 
     public function create()
     {
         $authors = Author::all();
         $genres = Genre::all();
-        return view('books.create', compact('authors', 'genres'));
+        return view('admin.books.create', compact('authors', 'genres'));
     }
 
     public function store(Request $request)
@@ -82,14 +86,14 @@ class BookController extends Controller
             $book->genres()->attach($request->genres);
         }
 
-        return redirect()->route('books.show', $book)->with('success', 'Livre créé avec succès.');
+        return redirect()->route('admin.books.index')->with('success', 'Livre créé avec succès.');
     }
 
     public function edit(Book $book)
     {
         $authors = Author::all();
         $genres = Genre::all();
-        return view('books.edit', compact('book', 'authors', 'genres'));
+        return view('admin.books.edit', compact('book', 'authors', 'genres'));
     }
 
     public function update(Request $request, Book $book)
@@ -116,12 +120,12 @@ class BookController extends Controller
             $book->genres()->sync($request->genres);
         }
 
-        return redirect()->route('books.show', $book)->with('success', 'Livre mis à jour avec succès.');
+        return redirect()->route('admin.books.index')->with('success', 'Livre mis à jour avec succès.');
     }
 
     public function destroy(Book $book)
     {
         $book->delete();
-        return redirect()->route('books.index')->with('success', 'Livre supprimé avec succès.');
+        return redirect()->route('admin.books.index')->with('success', 'Livre supprimé avec succès.');
     }
 }

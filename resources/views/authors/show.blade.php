@@ -5,7 +5,7 @@
 @section('content')
 <div class="row mb-4">
     <div class="col-md-8">
-        <h1>{{ $author->nom }}</h1>
+        <h1><i class="fas fa-user-edit"></i> {{ $author->nom }}</h1>
     </div>
     @auth
         @if(auth()->user()->role === 'admin')
@@ -32,65 +32,43 @@
                 <h5>Biographie</h5>
             </div>
             <div class="card-body">
-                {{ $author->biographie ?? 'Pas de biographie disponible' }}
+                <p>{{ $author->biographie ?? 'Aucune biographie disponible.' }}</p>
             </div>
         </div>
-    </div>
-    
-    <div class="col-md-4">
+
         <div class="card">
             <div class="card-header">
-                <h5>Statistiques</h5>
+                <h5><i class="fas fa-book"></i> Bibliographie ({{ $author->books->count() }} livres)</h5>
             </div>
             <div class="card-body">
-                <p class="mb-2">
-                    <strong>Nombre de livres:</strong><br>
-                    <span class="badge bg-info" style="font-size: 1.2rem; padding: 10px;">
-                        {{ $author->books()->count() }}
-                    </span>
-                </p>
-                <p class="mb-0">
-                    <strong>Date d'ajout:</strong><br>
-                    {{ $author->created_at->format('d/m/Y') }}
-                </p>
+                @forelse($author->books as $book)
+                    <div class="mb-3 pb-3 border-bottom">
+                        <h6>
+                            <a href="{{ route('books.show', $book) }}" class="text-decoration-none">
+                                {{ $book->titre }}
+                            </a>
+                        </h6>
+                        <p class="text-muted small mb-2">
+                            {{ $book->editeur }} - {{ $book->annee_publication }}
+                        </p>
+                        <p class="small">{{ substr($book->resume, 0, 150) }}{{ strlen($book->resume) > 150 ? '...' : '' }}</p>
+                        <span class="badge bg-success">{{ $book->getAvailableCopiesCount() }}/{{ $book->getTotalCopiesCount() }} disponibles</span>
+                    </div>
+                @empty
+                    <p class="text-muted">Aucun livre pour cet auteur.</p>
+                @endforelse
             </div>
         </div>
     </div>
-</div>
 
-<div class="mt-4">
-    <h3>Livres de cet auteur</h3>
-    <div class="row">
-        @forelse($author->books as $book)
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="card-title">{{ $book->titre }}</h6>
-                        <p class="card-text small text-muted">{{ $book->editeur }}</p>
-                        <p class="card-text small">
-                            <strong>Année:</strong> {{ $book->annee_publication }}
-                        </p>
-                    </div>
-                    <div class="card-footer bg-light">
-                        <a href="{{ route('books.show', $book) }}" class="btn btn-sm btn-primary">
-                            <i class="fas fa-eye"></i> Voir
-                        </a>
-                    </div>
-                </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <a href="{{ route('authors.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
+                    <i class="fas fa-arrow-left"></i> Retour aux Auteurs
+                </a>
             </div>
-        @empty
-            <div class="col-12">
-                <div class="alert alert-info">
-                    Aucun livre pour cet auteur.
-                </div>
-            </div>
-        @endforelse
+        </div>
     </div>
-</div>
-
-<div class="mt-4">
-    <a href="{{ route('authors.index') }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Retour aux Auteurs
-    </a>
 </div>
 @endsection

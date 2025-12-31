@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Détails de la Réservation')
+@section('title', 'Détails de la Réservation - Admin')
 
 @section('content')
 <div class="row mb-4">
@@ -20,13 +20,15 @@
                     <div class="col-md-6">
                         <p>
                             <strong>Livre:</strong><br>
-                            <a href="{{ route('books.show', $reservation->book) }}">
+                            <a href="{{ route('admin.books.edit', $reservation->book) }}">
                                 {{ $reservation->book->titre }}
                             </a>
                         </p>
                         <p>
                             <strong>Membre:</strong><br>
-                            {{ $reservation->membre->getFullName() }}
+                            <a href="{{ route('admin.members.show', $reservation->membre) }}">
+                                {{ $reservation->membre->getFullName() }}
+                            </a>
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -48,13 +50,6 @@
                 </div>
             </div>
         </div>
-
-        @if($reservation->statut === 'disponible')
-            <div class="alert alert-success mb-4">
-                <i class="fas fa-check-circle"></i> Un exemplaire est disponible ! 
-                Veuillez contacter la bibliothèque pour récupérer votre livre.
-            </div>
-        @endif
 
         <div class="card">
             <div class="card-header">
@@ -78,8 +73,8 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
-                <a href="{{ route('reservations.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
-                    <i class="fas fa-arrow-left"></i> Retour aux Réservations
+                <a href="{{ route('admin.reservations.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
+                    <i class="fas fa-arrow-left"></i> Retour
                 </a>
             </div>
         </div>
