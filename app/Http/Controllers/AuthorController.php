@@ -10,12 +10,7 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = Author::with('books')->paginate(15);
-        
-        // Afficher la vue admin ou membre selon le rôle
-        if (auth()->check() && auth()->user()->role === 'admin') {
-            return view('admin.authors.index', compact('authors'));
-        }
-        return view('authors.index', compact('authors'));
+        return view('admin.authors.index', compact('authors'));
     }
 
     public function show(Author $author)
@@ -23,6 +18,8 @@ class AuthorController extends Controller
         $author->load('books');
         return view('authors.show', compact('author'));
     }
+
+    public function create()
     {
         return view('admin.authors.create');
     }
