@@ -85,7 +85,9 @@
 </div>
 
 <!-- Pagination -->
+@if ($loans instanceof \Illuminate\Pagination\Paginator)
 <nav>
     {{ $loans->links() }}
 </nav>
+@endif
 @endsection

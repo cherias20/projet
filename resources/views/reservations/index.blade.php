@@ -55,7 +55,9 @@
 </div>
 
 <!-- Pagination -->
+@if ($reservations instanceof \Illuminate\Pagination\Paginator)
 <nav>
     {{ $reservations->links() }}
 </nav>
+@endif
 @endsection

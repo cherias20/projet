@@ -10,6 +10,7 @@
         </h1>
         <p class="page-subtitle">Suivez les emprunts des livres par les membres</p>
     </div>
+    
 </div>
 
 <div class="card">
@@ -41,11 +42,11 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse(DB::table('emprunts')->join('membres', 'emprunts.id_membre', '=', 'membres.id_membre')->join('livres', 'emprunts.id_livre', '=', 'livres.id_livre')->select('emprunts.*', 'membres.nom as membre_nom', 'livres.titre as livre_titre')->get() as $loan)
+                @forelse($loans as $loan)
                     <tr>
                         <td>{{ $loan->id_emprunt }}</td>
-                        <td><strong>{{ $loan->membre_nom }}</strong></td>
-                        <td>{{ $loan->livre_titre }}</td>
+                        <td><strong>{{ $loan->membre->nom ?? 'N/A' }}</strong></td>
+                        <td>{{ $loan->exemplaire->book->titre ?? 'N/A' }}</td>
                         <td>{{ \Carbon\Carbon::parse($loan->date_emprunt)->format('d/m/Y') }}</td>
                         <td>{{ \Carbon\Carbon::parse($loan->date_retour_prevue)->format('d/m/Y') }}</td>
                         <td>

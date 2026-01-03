@@ -11,14 +11,6 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        if (auth()->check() && auth()->user()->role === 'admin') {
-            // Vue admin - toutes les réservations
-            $reservations = Reservation::with(['membre', 'book'])
-                ->orderBy('position')
-                ->paginate(20);
-            return view('admin.reservations.index', compact('reservations'));
-        }
-        
         // Vue membre - réservations du membre connecté
         if (auth()->check()) {
             $membre = auth()->user()->membre;
@@ -33,6 +25,15 @@ class ReservationController extends Controller
         return view('reservations.index', compact('reservations'));
     }
 
+    public function adminIndex()
+    {
+        // Vue admin - toutes les réservations
+        $reservations = Reservation::with(['membre', 'book'])
+            ->orderBy('position')
+            ->paginate(20);
+        return view('admin.reservations.index', compact('reservations'));
+    }
+
     public function show(Reservation $reservation)
     {
         $reservation->load(['membre', 'book']);
@@ -43,6 +44,8 @@ class ReservationController extends Controller
         }
         return view('reservations.show', compact('reservation'));
     }
+
+    public function create()
     {
         $books = Book::with('exemplaires')->get();
         $membres = Membre::where('statut', 'actif')->get();

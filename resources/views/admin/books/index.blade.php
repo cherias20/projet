@@ -11,7 +11,7 @@
         <p class="page-subtitle">Gérez le catalogue des livres de la bibliothèque</p>
     </div>
     <div class="col-auto">
-        <a href="#" class="btn btn-primary">
+        <a href="{{ route('admin.books.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Ajouter un Livre
         </a>
     </div>
@@ -22,6 +22,10 @@
         <i class="fas fa-list"></i> Liste des Livres
     </div>
     <div class="card-body">
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Rechercher un livre..." style="max-width: 400px;">
+        </div>
+
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -44,12 +48,19 @@
                         <td>{{ $book->genre ?? 'N/A' }}</td>
                         <td><span class="badge bg-info">{{ $book->exemplaires_count ?? 0 }}</span></td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-primary">
+                            <a href="{{ route('admin.books.show', $book->id_livre) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-eye"></i> Voir
+                            </a>
+                            <a href="{{ route('admin.books.edit', $book->id_livre) }}" class="btn btn-sm btn-info">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                            <form method="POST" action="{{ route('admin.books.destroy', $book->id_livre) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty

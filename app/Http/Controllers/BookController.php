@@ -13,16 +13,25 @@ class BookController extends Controller
     {
         $books = Book::with(['authors', 'genres', 'exemplaires'])->paginate(12);
         
-        // Afficher la vue admin ou membre selon le rôle
-        if (auth()->check() && auth()->user()->role === 'admin') {
+        // Si la route est /admin/books, afficher la vue admin
+        if (request()->is('admin/*')) {
             return view('admin.books.index', compact('books'));
         }
+        
+        // Sinon afficher la vue publique
         return view('books.index', compact('books'));
     }
 
     public function show(Book $book)
     {
         $book->load(['authors', 'genres', 'exemplaires']);
+        
+        // Si la route est /admin/books, afficher la vue admin
+        if (request()->is('admin/*')) {
+            return view('admin.books.show', compact('book'));
+        }
+        
+        // Sinon afficher la vue publique
         return view('books.show', compact('book'));
     }
 

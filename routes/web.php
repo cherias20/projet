@@ -101,8 +101,11 @@ Route::middleware(['auth'])->group(function () {
         // Enregistrer un nouveau livre en base de données
         Route::post('/', [BookController::class, 'store'])->name('store');
         
-        // Formulaire pour éditer un livre
+        // Formulaire pour éditer un livre (AVANT la route show)
         Route::get('/{book}/edit', [BookController::class, 'edit'])->name('edit');
+        
+        // Détails d'un livre
+        Route::get('/{book}', [BookController::class, 'show'])->name('show');
         
         // Mettre à jour un livre existant
         Route::put('/{book}', [BookController::class, 'update'])->name('update');
@@ -137,7 +140,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['admin'])->prefix('admin/loans')->name('admin.loans.')->group(function () {
         // Liste de tous les emprunts
-        Route::get('/', [LoanController::class, 'index'])->name('index');
+        Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
         
         // Détails complets d'un emprunt
         Route::get('/{loan}', [LoanController::class, 'show'])->name('show');
@@ -158,7 +161,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::middleware(['admin'])->prefix('admin/reservations')->name('admin.reservations.')->group(function () {
         // Liste de toutes les réservations
-        Route::get('/', [ReservationController::class, 'index'])->name('index');
+        Route::get('/', [ReservationController::class, 'adminIndex'])->name('index');
         
         // Détails d'une réservation
         Route::get('/{reservation}', [ReservationController::class, 'show'])->name('show');

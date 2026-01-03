@@ -10,6 +10,7 @@
         </h1>
         <p class="page-subtitle">Gérez les réservations de livres des membres</p>
     </div>
+    
 </div>
 
 <div class="card">
@@ -29,11 +30,11 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse(DB::table('reservations')->join('membres', 'reservations.id_membre', '=', 'membres.id_membre')->join('livres', 'reservations.id_livre', '=', 'livres.id_livre')->select('reservations.*', 'membres.nom as membre_nom', 'livres.titre as livre_titre')->get() as $reservation)
+                @forelse($reservations as $reservation)
                     <tr>
                         <td>{{ $reservation->id_reservation }}</td>
-                        <td><strong>{{ $reservation->membre_nom }}</strong></td>
-                        <td>{{ $reservation->livre_titre }}</td>
+                        <td><strong>{{ $reservation->membre->nom ?? 'N/A' }}</strong></td>
+                        <td>{{ $reservation->book->titre ?? 'N/A' }}</td>
                         <td>{{ \Carbon\Carbon::parse($reservation->date_reservation)->format('d/m/Y H:i') }}</td>
                         <td>
                             @if($reservation->statut === 'en_attente')

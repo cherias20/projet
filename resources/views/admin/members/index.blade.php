@@ -10,6 +10,11 @@
         </h1>
         <p class="page-subtitle">Gérez les comptes des membres de la bibliothèque</p>
     </div>
+    <div class="col-auto">
+        <a href="{{ route('admin.members.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter un Membre
+        </a>
+    </div>
 </div>
 
 <div class="card">

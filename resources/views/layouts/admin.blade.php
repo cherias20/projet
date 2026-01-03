@@ -249,7 +249,7 @@
                             <i class="fas fa-exchange-alt"></i> Emprunts
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('loans.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.loans.index') }}"><i class="fas fa-list"></i> Liste</a></li>
                         </ul>
                     </li>
 
@@ -267,7 +267,7 @@
                             <i class="fas fa-bookmark"></i> Réservations
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('reservations.index') }}"><i class="fas fa-list"></i> Liste</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.reservations.index') }}"><i class="fas fa-list"></i> Liste</a></li>
                         </ul>
                     </li>
 

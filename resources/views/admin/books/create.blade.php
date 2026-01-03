@@ -54,6 +54,14 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <label for="exemplaires" class="form-label">Nombre d'exemplaires</label>
+                        <input type="number" class="form-control @error('exemplaires') is-invalid @enderror" id="exemplaires" name="exemplaires" value="{{ old('exemplaires', 1) }}" min="1">
+                        @error('exemplaires')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Créer le Livre

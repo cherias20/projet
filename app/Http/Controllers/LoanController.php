@@ -13,14 +13,6 @@ class LoanController extends Controller
 {
     public function index()
     {
-        if (auth()->check() && auth()->user()->role === 'admin') {
-            // Vue admin - tous les emprunts
-            $loans = Loan::with(['membre', 'exemplaire.book'])
-                ->orderBy('date_emprunt', 'desc')
-                ->paginate(20);
-            return view('admin.loans.index', compact('loans'));
-        }
-        
         // Vue membre - emprunts du membre connecté
         if (auth()->check()) {
             $membre = auth()->user()->membre;
@@ -33,6 +25,15 @@ class LoanController extends Controller
         }
         
         return view('loans.index', compact('loans'));
+    }
+
+    public function adminIndex()
+    {
+        // Vue admin - tous les emprunts
+        $loans = Loan::with(['membre', 'exemplaire.book'])
+            ->orderBy('date_emprunt', 'desc')
+            ->paginate(20);
+        return view('admin.loans.index', compact('loans'));
     }
 
     public function show(Loan $loan)
