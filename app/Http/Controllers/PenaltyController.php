@@ -11,7 +11,7 @@ class PenaltyController extends Controller
 {
     public function index()
     {
-        if (auth()->check() && auth()->user()->role === 'admin') {
+        if (session()->has('membre_id') && session()->get('membre_role') === 'admin') {
             // Vue admin - toutes les pénalités
             $penalties = Penalty::with(['membre', 'loan.exemplaire.book'])
                 ->orderBy('date_calcul', 'desc')
@@ -20,8 +20,8 @@ class PenaltyController extends Controller
         }
         
         // Vue membre - pénalités du membre connecté
-        if (auth()->check()) {
-            $membre = auth()->user()->membre;
+        if (session()->has('membre_id')) {
+            $membre = Membre::find(session()->get('membre_id'));
             $penalties = $membre->penalites()
                 ->with('loan.exemplaire.book')
                 ->orderBy('date_calcul', 'desc')
@@ -38,7 +38,7 @@ class PenaltyController extends Controller
         $penalty->load(['membre', 'loan.exemplaire.book']);
         
         // Afficher la vue admin ou membre selon le rôle
-        if (auth()->check() && auth()->user()->role === 'admin') {
+        if (session()->has('membre_id') && session()->get('membre_role') === 'admin') {
             return view('admin.penalties.show', compact('penalty'));
         }
         return view('penalties.show', compact('penalty'));
@@ -98,6 +98,11 @@ class PenaltyController extends Controller
         ];
 
         return view('penalties.statistics', compact('stats'));
+    }
+
+    public function unpaid()
+    {
+        return $this->getUnpaidPenalties();
     }
 
     public function remit(Request $request, Penalty $penalty)

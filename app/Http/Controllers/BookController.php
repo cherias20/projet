@@ -75,17 +75,36 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
-            'sous_titre' => 'nullable|string|max:255',
             'editeur' => 'required|string|max:255',
             'annee_publication' => 'required|integer|min:1000|max:' . date('Y'),
             'resume' => 'nullable|string',
-            'langue' => 'required|string|max:50',
-            'pages' => 'nullable|integer|min:1',
+            'images' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'exemplaires' => 'nullable|integer|min:1',
             'authors' => 'array',
             'genres' => 'array',
         ]);
 
+        $nombreExemplaires = $validated['exemplaires'] ?? 1;
+        unset($validated['exemplaires']);
+
+        // Gérer l'upload de l'image
+        if ($request->hasFile('images')) {
+            $imagePath = $request->file('images')->store('books', 'public');
+            $validated['images'] = $imagePath;
+        }
+
         $book = Book::create($validated);
+
+        // Créer les exemplaires
+        for ($i = 0; $i < $nombreExemplaires; $i++) {
+            $book->exemplaires()->create([
+                'code_barre' => 'CODE-' . $book->id_livre . '-' . ($i + 1),
+                'statut' => 'disponible',
+                'date_acquisition' => now()->toDateString(),
+                'prix_achat' => 0,
+                'date_creation' => now(),
+            ]);
+        }
 
         if ($request->has('authors')) {
             $book->authors()->attach($request->authors);
@@ -109,15 +128,19 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
-            'sous_titre' => 'nullable|string|max:255',
             'editeur' => 'required|string|max:255',
             'annee_publication' => 'required|integer|min:1000|max:' . date('Y'),
             'resume' => 'nullable|string',
-            'langue' => 'required|string|max:50',
-            'pages' => 'nullable|integer|min:1',
+            'images' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'authors' => 'array',
             'genres' => 'array',
         ]);
+
+        // Gérer l'upload de l'image
+        if ($request->hasFile('images')) {
+            $imagePath = $request->file('images')->store('books', 'public');
+            $validated['images'] = $imagePath;
+        }
 
         $book->update($validated);
 

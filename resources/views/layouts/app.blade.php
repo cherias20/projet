@@ -219,14 +219,10 @@
                             <i class="fas fa-book"></i> Livres
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('authors.index') }}">
-                            <i class="fas fa-pen-fancy"></i> Auteurs
-                        </a>
-                    </li>
                     
-                    @auth
-                        @if(auth()->user()->role === 'admin')
+                    
+                    @if(session()->has('membre_id'))
+                        @if(session()->get('membre_role') === 'admin')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                     <i class="fas fa-cog"></i> Admin
@@ -252,7 +248,7 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="{{ route('reservations.index') }}" data-bs-toggle="dropdown">
                                 <i class="fas fa-bookmark"></i> Réservations
                             </a>
                             <ul class="dropdown-menu">
@@ -271,14 +267,14 @@
 
                         <!-- Avatar Dropdown -->
                         <li class="nav-item dropdown">
-                            <button class="avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ Auth::user()->name }}">
+                            <button class="avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ session()->get('membre_nom') }}">
                                 <i class="fas fa-user"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
                                     <span class="dropdown-item-text">
-                                        <strong>{{ Auth::user()->name }}</strong><br>
-                                        <small class="text-muted">{{ Auth::user()->email }}</small>
+                                        <strong>{{ session()->get('membre_nom') }}</strong><br>
+                                        <small class="text-muted">{{ session()->get('membre_email') }}</small>
                                     </span>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
@@ -304,7 +300,7 @@
                                 <i class="fas fa-user-plus"></i> Inscription
                             </a>
                         </li>
-                    @endauth
+                    @endif
                 </ul>
             </div>
         </div>

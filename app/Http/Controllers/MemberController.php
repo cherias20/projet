@@ -13,6 +13,11 @@ class MemberController extends Controller
         return view('admin.members.index', compact('membres'));
     }
 
+    public function show(Membre $membre)
+    {
+        return view('admin.members.show', compact('membre'));
+    }
+
     public function create()
     {
         return view('admin.members.create');

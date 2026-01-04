@@ -309,6 +309,12 @@ Route::middleware(['auth'])->group(function () {
         // Liste des pénalités (admin = tous, membre = ses pénalités)
         Route::get('/', [PenaltyController::class, 'index'])->name('index');
         
+        // Pénalités non payées
+        Route::get('/unpaid', [PenaltyController::class, 'unpaid'])->name('unpaid');
+        
+        // Statistiques des pénalités
+        Route::get('/statistics', [PenaltyController::class, 'statistics'])->name('statistics');
+        
         // Détails d'une pénalité
         Route::get('/{penalty}', [PenaltyController::class, 'show'])->name('show');
         

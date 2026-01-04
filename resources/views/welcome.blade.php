@@ -458,14 +458,55 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('books.index') }}">Catalogue</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('authors.index') }}">Auteurs</a>
-                    </li>
-                    <li class="nav-item ms-3">
-                        <a href="{{ route('login') }}" class="btn btn-login">
-                            <i class="fas fa-sign-in-alt"></i> Connexion
-                        </a>
-                    </li>
+                  
+                    
+                    @if(session()->has('membre_id'))
+                        <li class="nav-item dropdown ms-3">
+                            <button class="btn btn-login dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i> {{ session()->get('membre_nom') }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <span class="dropdown-item-text">
+                                        <strong>{{ session()->get('membre_nom') }}</strong><br>
+                                        <small class="text-muted">{{ session()->get('membre_email') }}</small>
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('loans.index') }}">
+                                        <i class="fas fa-exchange-alt"></i> Mes emprunts
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('reservations.index') }}">
+                                        <i class="fas fa-bookmark"></i> Mes réservations
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form-welcome').submit();">
+                                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                                    </a>
+                                    <form id="logout-form-welcome" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <li class="nav-item ms-3">
+                            <a href="{{ route('login') }}" class="btn btn-login">
+                                <i class="fas fa-sign-in-alt"></i> Connexion
+                            </a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a href="{{ route('register') }}" class="btn btn-login">
+                                <i class="fas fa-user-plus"></i> Inscription
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

@@ -413,34 +413,34 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <a href="{{ route('books.index') }}" class="btn btn-primary w-100">
+                                    <a href="{{ route('admin.books.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-book"></i> Gérer les Livres
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="{{ route('authors.index') }}" class="btn btn-success w-100">
+                                    <a href="{{ route('admin.authors.index') }}" class="btn btn-success w-100">
                                         <i class="fas fa-pen-fancy"></i> Gérer les Auteurs
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="{{ route('loans.index') }}" class="btn btn-warning w-100">
+                                    <a href="{{ route('admin.loans.index') }}" class="btn btn-warning w-100">
                                         <i class="fas fa-exchange-alt"></i> Gérer les Emprunts
                                     </a>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <a href="#" class="btn btn-info w-100">
+                                    <a href="{{ route('admin.reservations.index') }}" class="btn btn-info w-100">
                                         <i class="fas fa-bookmark"></i> Réservations
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="#" class="btn btn-secondary w-100">
+                                    <a href="{{ route('admin.genres.index') }}" class="btn btn-secondary w-100">
                                         <i class="fas fa-tag"></i> Genres
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="#" class="btn btn-dark w-100">
+                                    <a href="{{ route('admin.members.index') }}" class="btn btn-dark w-100">
                                         <i class="fas fa-users"></i> Membres
                                     </a>
                                 </div>

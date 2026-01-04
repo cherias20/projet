@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use App\Helpers\AuthHelper;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Définir les directives Blade personnalisées
+        Blade::if('auth', function () {
+            return AuthHelper::check();
+        });
+
+        Blade::if('guest', function () {
+            return !AuthHelper::check();
+        });
     }
 }

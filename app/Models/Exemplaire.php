@@ -11,7 +11,7 @@ class Exemplaire extends Model
 
     protected $table = 'exemplaires';
     protected $primaryKey = 'id_exemple';
-    protected $fillable = ['code_barre', 'format', 'statut', 'date_acquisition', 'prix_achat', 'id_livre'];
+    protected $fillable = ['code_barre', 'format', 'statut', 'date_acquisition', 'prix_achat', 'id_livre', 'date_creation'];
     protected $casts = [
         'date_acquisition' => 'date',
         'prix_achat' => 'decimal:2',

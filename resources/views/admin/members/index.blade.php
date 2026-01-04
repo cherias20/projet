@@ -10,11 +10,7 @@
         </h1>
         <p class="page-subtitle">Gérez les comptes des membres de la bibliothèque</p>
     </div>
-    <div class="col-auto">
-        <a href="{{ route('admin.members.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Ajouter un Membre
-        </a>
-    </div>
+    
 </div>
 
 <div class="card">
@@ -66,15 +62,18 @@
                         </td>
                         <td>{{ \Carbon\Carbon::parse($member->date_inscription)->format('d/m/Y') }}</td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-primary">
+                            <a href="{{ route('admin.members.show', $member->id_membre) }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-eye"></i> Voir
                             </a>
-                            <a href="#" class="btn btn-sm btn-info">
+                            <a href="{{ route('admin.members.edit', $member->id_membre) }}" class="btn btn-sm btn-info">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <i class="fas fa-ban"></i>
-                            </a>
+                            <form action="{{ route('admin.members.suspend', $member->id_membre) }}" method="POST" style="display:inline;" onsubmit="return confirm('Suspendre ce membre ?');">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty

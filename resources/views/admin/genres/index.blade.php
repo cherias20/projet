@@ -33,23 +33,27 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse(DB::table('genres')->get() as $genre)
+                @forelse($genres as $genre)
                     <tr>
-                        <td>{{ $genre->id_genre }}</td>
-                        <td><strong>{{ $genre->nom_genre }}</strong></td>
+                        <td>{{ $genre->id_genre ?? $genre->id }}</td>
+                        <td><strong>{{ $genre->nom }}</strong></td>
                         <td>{{ Str::limit($genre->description ?? '', 50) }}</td>
                         <td>
                             <span class="badge bg-info">
-                                {{ DB::table('book_genre')->where('id_genre', $genre->id_genre)->count() }}
+                                {{ $genre->books()->count() }}
                             </span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editGenreModal">
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editGenreModal" data-genre-id="{{ $genre->id_genre ?? $genre->id }}" data-genre-nom="{{ $genre->nom }}" data-genre-description="{{ $genre->description }}">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                            <form method="POST" action="{{ route('admin.genres.destroy', $genre->id_genre ?? $genre->id) }}" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger" onclick="return confirm('Supprimer ce genre ?');">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty
