@@ -68,7 +68,7 @@
                 </p>
                 @if($loan->statut === 'en_cours')
                     @if($loan->nombre_renouvellement < $loan->renouvellement_max)
-                        <form method="POST" action="{{ route('loans.renew', $loan) }}" style="display:inline;">
+                        <form method="POST" action="{{ route('admin.loans.renew', $loan) }}" style="display:inline;">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-primary">
                                 <i class="fas fa-sync"></i> Renouveler l'Emprunt
@@ -87,7 +87,7 @@
                     <h5>Actions</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('loans.return', $loan) }}">
+                    <form method="POST" action="{{ route('admin.loans.return', $loan) }}">
                         @csrf
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-check"></i> Retourner le Livre
@@ -101,7 +101,7 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
-                <a href="{{ route('loans.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
+                <a href="{{ route('admin.loans.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
                     <i class="fas fa-arrow-left"></i> Retour aux Emprunts
                 </a>
             </div>

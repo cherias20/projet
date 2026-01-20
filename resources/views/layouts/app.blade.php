@@ -105,7 +105,131 @@
 
         .main-content {
             padding: 30px 20px;
-            min-height: calc(100vh - 70px);
+            min-height: calc(100vh - 70px - 400px);
+        }
+
+        /* Footer Styles */
+        .footer-app {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 3rem 0 0;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 3rem 0;
+        }
+
+        .footer-section {
+            padding: 0 1rem;
+        }
+
+        .footer-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-hours {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-hours li {
+            margin-bottom: 0.8rem;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
+
+        .footer-hours strong {
+            color: white;
+            opacity: 1;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+
+        .footer-bottom {
+            padding: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
         }
 
         .container-lg {
@@ -256,15 +380,6 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                <i class="fas fa-exclamation-circle"></i> Pénalités
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('penalties.index') }}"><i class="fas fa-list"></i> Mes pénalités</a></li>
-                            </ul>
-                        </li>
-
                         <!-- Avatar Dropdown -->
                         <li class="nav-item dropdown">
                             <button class="avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ session()->get('membre_nom') }}">
@@ -312,6 +427,57 @@
             @yield('content')
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer-app">
+        <div class="container-lg">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h5 class="footer-title"><i class="fas fa-book"></i> Bibliothèque</h5>
+                    <p>Votre source complète pour découvrir, emprunter et réserver des livres. Accédez à une collection diverse et constamment mise à jour.</p>
+                </div>
+                <div class="footer-section">
+                    <h5 class="footer-title"><i class="fas fa-link"></i> Liens Rapides</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ route('books.index') }}"><i class="fas fa-book-open"></i> Catalogue</a></li>
+                        @if(session()->has('membre_id'))
+                            <li><a href="{{ route('admin.loans.index') }}"><i class="fas fa-exchange-alt"></i> Emprunts</a></li>
+                            <li><a href="{{ route('reservations.index') }}"><i class="fas fa-bookmark"></i> Réservations</a></li>
+                        @else
+                            <li><a href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
+                            <li><a href="{{ route('register') }}"><i class="fas fa-user-plus"></i> Inscription</a></li>
+                        @endif
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h5 class="footer-title"><i class="fas fa-info-circle"></i> Informations</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ route('about') }}"><i class="fas fa-question-circle"></i> À propos</a></li>
+                        <li><a href="{{ route('contact') }}"><i class="fas fa-phone"></i> Contact</a></li>
+                        <li><a href="{{ route('terms') }}"><i class="fas fa-file-alt"></i> Conditions</a></li>
+                        <li><a href="{{ route('privacy') }}"><i class="fas fa-lock"></i> Confidentialité</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h5 class="footer-title"><i class="fas fa-clock"></i> Horaires</h5>
+                    <ul class="footer-hours">
+                        <li><strong>Lundi - Vendredi:</strong> 9h - 19h</li>
+                        <li><strong>Samedi:</strong> 10h - 18h</li>
+                        <li><strong>Dimanche:</strong> Fermé</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Bibliothèque. Tous droits réservés.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

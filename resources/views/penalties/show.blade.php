@@ -30,7 +30,7 @@
                     <div class="col-md-6">
                         <p>
                             <strong>Emprunt:</strong><br>
-                            <a href="{{ route('loans.show', $penalty->loan) }}">
+                            <a href="{{ route('admin.loans.show', $penalty->loan) }}">
                                 {{ $penalty->loan->exemplaire->book->titre }}
                             </a>
                         </p>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Penalty;
 use App\Models\Membre;
 use App\Models\Loan;
+use App\Models\Parameter;
+use App\Services\PenaltyService;
 use Illuminate\Http\Request;
 
 class PenaltyController extends Controller
@@ -115,5 +117,81 @@ class PenaltyController extends Controller
         $penalty->save();
 
         return back()->with('success', 'Pénalité remise avec le motif: ' . $validated['reason']);
+    }
+
+    /**
+     * Afficher les paramètres de pénalité (Admin)
+     */
+    public function settings()
+    {
+        if (session()->get('membre_role') !== 'admin') {
+            return redirect()->route('books.index')->with('error', 'Accès non autorisé.');
+        }
+
+        $dailyRate = Parameter::get('penalty_daily_rate', 1.50);
+        $blockThreshold = Parameter::get('penalty_block_threshold', 30.00);
+
+        return view('admin.penalties.settings', compact('dailyRate', 'blockThreshold'));
+    }
+
+    /**
+     * Mettre à jour les paramètres de pénalité
+     */
+    public function updateSettings(Request $request)
+    {
+        if (session()->get('membre_role') !== 'admin') {
+            return redirect()->route('books.index')->with('error', 'Accès non autorisé.');
+        }
+
+        $validated = $request->validate([
+            'daily_rate' => 'required|numeric|min:0|max:100',
+            'block_threshold' => 'required|numeric|min:0|max:1000',
+        ], [
+            'daily_rate.required' => 'Le taux journalier est obligatoire',
+            'daily_rate.numeric' => 'Le taux doit être un nombre',
+            'block_threshold.required' => 'Le seuil de blocage est obligatoire',
+            'block_threshold.numeric' => 'Le seuil doit être un nombre',
+        ]);
+
+        Parameter::set('penalty_daily_rate', $validated['daily_rate'], 'Taux de pénalité par jour en euros');
+        Parameter::set('penalty_block_threshold', $validated['block_threshold'], 'Montant seuil pour bloquer un compte');
+
+        return redirect()->route('penalties.settings')
+            ->with('success', 'Paramètres mis à jour avec succès !');
+    }
+
+    /**
+     * Débloquer manuellement un compte membre
+     */
+    public function unblockMember(Membre $membre)
+    {
+        if (session()->get('membre_role') !== 'admin') {
+            return redirect()->route('books.index')->with('error', 'Accès non autorisé.');
+        }
+
+        if ($membre->statut === 'bloqué') {
+            $membre->statut = 'actif';
+            $membre->save();
+
+            return back()->with('success', 'Compte débloqué avec succès !');
+        }
+
+        return back()->with('info', 'Ce compte n\'est pas bloqué.');
+    }
+
+    /**
+     * Afficher les comptes bloqués
+     */
+    public function blockedMembers()
+    {
+        if (session()->get('membre_role') !== 'admin') {
+            return redirect()->route('books.index')->with('error', 'Accès non autorisé.');
+        }
+
+        $members = Membre::where('statut', 'bloqué')
+            ->with('penalites')
+            ->paginate(20);
+
+        return view('admin.penalties.blocked-members', compact('members'));
     }
 }

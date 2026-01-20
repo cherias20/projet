@@ -7,22 +7,20 @@
     <div class="col-md-8">
         <h1><i class="fas fa-user-edit"></i> {{ $author->nom }}</h1>
     </div>
-    @auth
-        @if(auth()->user()->role === 'admin')
-            <div class="col-md-4 text-end">
-                <a href="{{ route('admin.authors.edit', $author) }}" class="btn btn-warning">
-                    <i class="fas fa-edit"></i> Éditer
-                </a>
-                <form method="POST" action="{{ route('admin.authors.destroy', $author) }}" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr?')">
-                        <i class="fas fa-trash"></i> Supprimer
-                    </button>
-                </form>
-            </div>
-        @endif
-    @endauth
+    @if(session()->has('membre_id') && session()->get('membre_role') === 'admin')
+        <div class="col-md-4 text-end">
+            <a href="{{ route('admin.authors.edit', $author) }}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Éditer
+            </a>
+            <form method="POST" action="{{ route('admin.authors.destroy', $author) }}" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr?')">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    @endif
 </div>
 
 <div class="row">

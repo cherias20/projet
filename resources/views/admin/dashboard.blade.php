@@ -1,457 +1,328 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Bibliothèque</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --text-dark: #2d3436;
-            --text-light: #636e72;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@php
+    use App\Models\Book;
+    use App\Models\Membre;
+    use App\Models\Loan;
+    use App\Models\Reservation;
+    
+    $totalBooks = Book::count();
+    $totalMembers = Membre::count();
+    $activeLoans = Loan::where('statut', 'en_cours')->count();
+    $totalReservations = Reservation::count();
+@endphp
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f6fa;
-            color: var(--text-dark);
-        }
+@extends('layouts.admin')
 
-        .navbar-app {
-            background: var(--primary-gradient);
-            box-shadow: 0 2px 15px rgba(102, 126, 234, 0.15);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+@section('title', 'Dashboard Admin')
 
-        .navbar-app .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white !important;
-            letter-spacing: -0.5px;
-        }
+@section('content')
+<style>
+    .dashboard-header {
+        margin-bottom: 2rem;
+    }
 
-        .navbar-app .nav-link {
-            color: rgba(255, 255, 255, 0.85) !important;
-            font-weight: 500;
-            margin: 0 8px;
-            padding: 8px 12px !important;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
+    .dashboard-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+    }
 
-        .navbar-app .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            color: white !important;
-            transform: translateY(-2px);
-        }
+    .dashboard-header p {
+        color: #636e72;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }
 
-        .avatar-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 0;
-            margin-left: 15px;
-        }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
 
-        .avatar-btn:hover {
-            background: rgba(255, 255, 255, 0.35);
-            border-color: white;
-            transform: scale(1.1);
-        }
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        border-left: 5px solid;
+    }
 
-        .dropdown-menu {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            margin-top: 8px;
-            min-width: 200px;
-        }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
 
-        .dropdown-item {
-            padding: 12px 18px;
-            border-radius: 6px;
-            margin: 4px 8px;
-            transition: all 0.2s ease;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
+    .stat-card.books {
+        border-left-color: #667eea;
+    }
 
-        .dropdown-item:hover {
-            background: var(--primary-gradient);
-            color: white;
-            transform: translateX(4px);
-        }
+    .stat-card.members {
+        border-left-color: #f093fb;
+    }
 
-        .main-content {
-            padding: 30px 20px;
-            min-height: calc(100vh - 70px);
-        }
+    .stat-card.loans {
+        border-left-color: #4facfe;
+    }
 
-        .container-lg {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .stat-card.reservations {
+        border-left-color: #43e97b;
+    }
 
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .stat-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+    }
 
-        .page-title i {
-            color: #667eea;
-        }
+    .stat-card.books .stat-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
 
-        .page-subtitle {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-        }
+    .stat-card.members .stat-icon {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+    }
 
-        .stat-card {
-            background: white;
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
+    .stat-card.loans .stat-icon {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+    }
 
-        .stat-card:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            transform: translateY(-4px);
-        }
+    .stat-card.reservations .stat-icon {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+    }
 
-        .stat-card h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 0;
-        }
+    .stat-content {
+        flex: 1;
+    }
 
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
-        }
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #2d3436;
+        margin: 0;
+    }
 
-        .card-header {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            font-weight: 600;
-            padding: 20px;
-            font-size: 1.1rem;
-        }
+    .stat-label {
+        color: #636e72;
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+    }
 
-        .btn {
-            border-radius: 8px;
-            font-weight: 600;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-            border: none;
-        }
+    .management-section {
+        margin-bottom: 3rem;
+    }
 
-        .btn-primary {
-            background: var(--primary-gradient);
-            color: white;
-        }
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-            color: white;
+    .section-title i {
+        color: #667eea;
+        font-size: 1.3rem;
+    }
+
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        border: 2px solid transparent;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        border-color: #667eea;
+    }
+
+    .action-card i {
+        font-size: 2.5rem;
+        color: #667eea;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .action-card h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #2d3436;
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
         }
 
-        .btn-success {
-            background: #51cf66;
-            color: white;
+        .action-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         }
+    }
+</style>
 
-        .btn-success:hover {
-            background: #37b24d;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(81, 207, 102, 0.3);
-        }
+<div class="dashboard-header">
+    <h1><i class="fas fa-chart-line"></i> Tableau de Bord Administrateur</h1>
+    <p>Bienvenue sur votre espace d'administration</p>
+</div>
 
-        .btn-warning {
-            background: #ffd43b;
-            color: #1c1c1c;
-        }
-
-        .btn-warning:hover {
-            background: #ffc220;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 212, 59, 0.3);
-        }
-    </style>
-</head>
-<body>
-    <!-- Navbar Moderne -->
-    <nav class="navbar navbar-expand-lg navbar-app">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
-                <i class="fas fa-book-open"></i> Bibliothèque
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-pen-fancy"></i> Auteurs
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('admin.authors.index') }}"><i class="fas fa-list"></i> Liste</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.authors.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-book"></i> Livres
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('admin.books.index') }}"><i class="fas fa-list"></i> Liste</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.books.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-tag"></i> Genres
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('admin.genres.index') }}"><i class="fas fa-list"></i> Liste</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.genres.create') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-exchange-alt"></i> Emprunts
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('loans.index') }}"><i class="fas fa-list"></i> Liste</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-users"></i> Membres
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('admin.members.index') }}"><i class="fas fa-list"></i> Liste</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-bookmark"></i> Réservations
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('reservations.index') }}"><i class="fas fa-list"></i> Liste</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- Avatar Dropdown -->
-                    <li class="nav-item dropdown">
-                        <button class="avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ session('membre_nom', 'Admin') }}">
-                            <i class="fas fa-user"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <span class="dropdown-item-text">
-                                    <strong>{{ session('membre_nom', 'Admin') }}</strong><br>
-                                    <small class="text-muted">{{ session('membre_email', 'admin@exemple.com') }}</small>
-                                </span>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('books.index') }}">
-                                    <i class="fas fa-arrow-left"></i> Retour à la Bibliothèque
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="{{ route('logout') }}" 
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i> Déconnexion
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+<!-- Statistics Cards -->
+<div class="stats-grid">
+    <div class="stat-card books">
+        <div class="stat-icon">
+            <i class="fas fa-book"></i>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container-lg">
-            <div class="row mb-4">
-                <div class="col">
-                    <h1 class="page-title">
-                        <i class="fas fa-tachometer-alt"></i> Tableau de Bord Admin
-                    </h1>
-                    <p class="page-subtitle">Bienvenue, <strong>{{ session('membre_nom') }}</strong> ! Voici un aperçu des statistiques de la bibliothèque.</p>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="row mb-4">
-                <!-- Livres -->
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p class="text-muted mb-1">Total Livres</p>
-                                    <h2 class="mb-0">{{ DB::table('books')->count() }}</h2>
-                                </div>
-                                <div style="font-size: 2rem; color: #667eea; opacity: 0.2;">
-                                    <i class="fas fa-book"></i>
-                                </div>
-                            </div>
-                            <small class="text-muted">Livres disponibles</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Membres -->
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p class="text-muted mb-1">Total Membres</p>
-                                    <h2 class="mb-0">{{ DB::table('membres')->count() }}</h2>
-                                </div>
-                                <div style="font-size: 2rem; color: #51cf66; opacity: 0.2;">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                            </div>
-                            <small class="text-muted">Comptes actifs</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Emprunts -->
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p class="text-muted mb-1">Emprunts Actifs</p>
-                                    <h2 class="mb-0">{{ DB::table('emprunts')->where('statut', 'en_cours')->count() }}</h2>
-                                </div>
-                                <div style="font-size: 2rem; color: #ffd43b; opacity: 0.2;">
-                                    <i class="fas fa-exchange-alt"></i>
-                                </div>
-                            </div>
-                            <small class="text-muted">En cours</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Réservations -->
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p class="text-muted mb-1">Réservations</p>
-                                    <h2 class="mb-0">{{ DB::table('reservations')->count() }}</h2>
-                                </div>
-                                <div style="font-size: 2rem; color: #ff6b6b; opacity: 0.2;">
-                                    <i class="fas fa-bookmark"></i>
-                                </div>
-                            </div>
-                            <small class="text-muted">En attente</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="row mt-5">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-lightning-bolt"></i> Actions Rapides
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <a href="{{ route('admin.books.index') }}" class="btn btn-primary w-100">
-                                        <i class="fas fa-book"></i> Gérer les Livres
-                                    </a>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <a href="{{ route('admin.authors.index') }}" class="btn btn-success w-100">
-                                        <i class="fas fa-pen-fancy"></i> Gérer les Auteurs
-                                    </a>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <a href="{{ route('admin.loans.index') }}" class="btn btn-warning w-100">
-                                        <i class="fas fa-exchange-alt"></i> Gérer les Emprunts
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <a href="{{ route('admin.reservations.index') }}" class="btn btn-info w-100">
-                                        <i class="fas fa-bookmark"></i> Réservations
-                                    </a>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <a href="{{ route('admin.genres.index') }}" class="btn btn-secondary w-100">
-                                        <i class="fas fa-tag"></i> Genres
-                                    </a>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <a href="{{ route('admin.members.index') }}" class="btn btn-dark w-100">
-                                        <i class="fas fa-users"></i> Membres
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="stat-content">
+            <div class="stat-number">{{ $totalBooks }}</div>
+            <div class="stat-label">Livres</div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <div class="stat-card members">
+        <div class="stat-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number">{{ $totalMembers }}</div>
+            <div class="stat-label">Membres</div>
+        </div>
+    </div>
+
+    <div class="stat-card loans">
+        <div class="stat-icon">
+            <i class="fas fa-exchange-alt"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number">{{ $activeLoans }}</div>
+            <div class="stat-label">Emprunts Actifs</div>
+        </div>
+    </div>
+
+    <div class="stat-card reservations">
+        <div class="stat-icon">
+            <i class="fas fa-bookmark"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number">{{ $totalReservations }}</div>
+            <div class="stat-label">Réservations</div>
+        </div>
+    </div>
+</div>
+
+<!-- Management Sections -->
+<div class="management-section">
+    <div class="section-title">
+        <i class="fas fa-book"></i> Gestion des Livres
+    </div>
+    <div class="action-grid">
+        <a href="{{ route('admin.books.index') }}" class="action-card">
+            <i class="fas fa-list"></i>
+            <h3>Tous les Livres</h3>
+        </a>
+        <a href="{{ route('admin.books.create') }}" class="action-card">
+            <i class="fas fa-plus"></i>
+            <h3>Ajouter un Livre</h3>
+        </a>
+    </div>
+</div>
+
+<div class="management-section">
+    <div class="section-title">
+        <i class="fas fa-pen-fancy"></i> Gestion des Auteurs
+    </div>
+    <div class="action-grid">
+        <a href="{{ route('admin.authors.index') }}" class="action-card">
+            <i class="fas fa-list"></i>
+            <h3>Tous les Auteurs</h3>
+        </a>
+        <a href="{{ route('admin.authors.create') }}" class="action-card">
+            <i class="fas fa-plus"></i>
+            <h3>Ajouter un Auteur</h3>
+        </a>
+    </div>
+</div>
+
+<div class="management-section">
+    <div class="section-title">
+        <i class="fas fa-tag"></i> Gestion des Genres
+    </div>
+    <div class="action-grid">
+        <a href="{{ route('admin.genres.index') }}" class="action-card">
+            <i class="fas fa-list"></i>
+            <h3>Tous les Genres</h3>
+        </a>
+        <a href="{{ route('admin.genres.create') }}" class="action-card">
+            <i class="fas fa-plus"></i>
+            <h3>Ajouter un Genre</h3>
+        </a>
+    </div>
+</div>
+
+<div class="management-section">
+    <div class="section-title">
+        <i class="fas fa-exchange-alt"></i> Gestion des Emprunts
+    </div>
+    <div class="action-grid">
+        <a href="{{ route('admin.loans.index') }}" class="action-card">
+            <i class="fas fa-list"></i>
+            <h3>Tous les Emprunts</h3>
+        </a>
+    </div>
+</div>
+
+<div class="management-section">
+    <div class="section-title">
+        <i class="fas fa-users"></i> Gestion des Membres
+    </div>
+    <div class="action-grid">
+        <a href="{{ route('admin.members.index') }}" class="action-card">
+            <i class="fas fa-list"></i>
+            <h3>Tous les Membres</h3>
+        </a>
+    </div>
+</div>
+
+<div class="management-section">
+    <div class="section-title">
+        <i class="fas fa-bookmark"></i> Gestion des Réservations
+    </div>
+    <div class="action-grid">
+        <a href="{{ route('admin.reservations.index') }}" class="action-card">
+            <i class="fas fa-list"></i>
+            <h3>Toutes les Réservations</h3>
+        </a>
+    </div>
+</div>
+
+@endsection

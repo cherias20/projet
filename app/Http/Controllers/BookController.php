@@ -38,29 +38,28 @@ class BookController extends Controller
     public function search(Request $request)
     {
         $query = Book::query()->with(['authors', 'genres', 'exemplaires']);
+        
+        $searchTerm = $request->input('query', '');
 
-        if ($request->has('titre') && $request->titre) {
-            $query->where('titre', 'like', '%' . $request->titre . '%')
-                  ->orWhere('resume', 'like', '%' . $request->titre . '%');
-        }
-
-        if ($request->has('auteur') && $request->auteur) {
-            $query->whereHas('authors', function ($q) {
-                $q->where('nom', 'like', '%' . request('auteur') . '%');
+        if ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
+                // Recherche dans le titre et le résumé
+                $q->where('titre', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('resume', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('editeur', 'like', '%' . $searchTerm . '%')
+                  // Recherche par auteur
+                  ->orWhereHas('authors', function ($subQ) use ($searchTerm) {
+                      $subQ->where('nom', 'like', '%' . $searchTerm . '%');
+                  })
+                  // Recherche par genre
+                  ->orWhereHas('genres', function ($subQ) use ($searchTerm) {
+                      $subQ->where('nom', 'like', '%' . $searchTerm . '%');
+                  });
             });
-        }
-
-        if ($request->has('genre') && $request->genre) {
-            $query->whereHas('genres', function ($q) {
-                $q->where('nom', 'like', '%' . request('genre') . '%');
-            });
-        }
-
-        if ($request->has('editeur') && $request->editeur) {
-            $query->where('editeur', 'like', '%' . $request->editeur . '%');
         }
 
         $books = $query->paginate(12);
+        
         return view('books.index', compact('books'));
     }
 
@@ -80,8 +79,6 @@ class BookController extends Controller
             'resume' => 'nullable|string',
             'images' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'exemplaires' => 'nullable|integer|min:1',
-            'authors' => 'array',
-            'genres' => 'array',
         ]);
 
         $nombreExemplaires = $validated['exemplaires'] ?? 1;
@@ -91,6 +88,9 @@ class BookController extends Controller
         if ($request->hasFile('images')) {
             $imagePath = $request->file('images')->store('books', 'public');
             $validated['images'] = $imagePath;
+        } else {
+            // Valeur par défaut si aucune image n'est fournie
+            $validated['images'] = null;
         }
 
         $book = Book::create($validated);
@@ -106,11 +106,13 @@ class BookController extends Controller
             ]);
         }
 
-        if ($request->has('authors')) {
+        // Attacher les auteurs sélectionnés
+        if ($request->has('authors') && !empty($request->authors)) {
             $book->authors()->attach($request->authors);
         }
 
-        if ($request->has('genres')) {
+        // Attacher les genres sélectionnés
+        if ($request->has('genres') && !empty($request->genres)) {
             $book->genres()->attach($request->genres);
         }
 
@@ -132,8 +134,6 @@ class BookController extends Controller
             'annee_publication' => 'required|integer|min:1000|max:' . date('Y'),
             'resume' => 'nullable|string',
             'images' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'authors' => 'array',
-            'genres' => 'array',
         ]);
 
         // Gérer l'upload de l'image
@@ -144,12 +144,18 @@ class BookController extends Controller
 
         $book->update($validated);
 
-        if ($request->has('authors')) {
+        // Synchroniser les auteurs
+        if ($request->has('authors') && !empty($request->authors)) {
             $book->authors()->sync($request->authors);
+        } else {
+            $book->authors()->detach();
         }
 
-        if ($request->has('genres')) {
+        // Synchroniser les genres
+        if ($request->has('genres') && !empty($request->genres)) {
             $book->genres()->sync($request->genres);
+        } else {
+            $book->genres()->detach();
         }
 
         return redirect()->route('admin.books.index')->with('success', 'Livre mis à jour avec succès.');

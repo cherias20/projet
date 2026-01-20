@@ -90,13 +90,20 @@
                         <h6 class="text-muted mb-2"><i class="fas fa-copy"></i> Exemplaires disponibles</h6>
                         @if($book->exemplaires && count($book->exemplaires) > 0)
                             <span class="badge bg-success">{{ count($book->exemplaires) }} exemplaire(s)</span>
-                            @auth
-                                <div class="mt-3">
-                                    <a href="#" class="btn btn-primary">
-                                        <i class="fas fa-check-circle"></i> Réserver ce livre
+                            @if(session()->has('membre_id'))
+                                <div class="mt-3 d-flex gap-2">
+                                    <a href="{{ route('admin.loans.create', ['book_id' => $book->id_livre]) }}" class="btn btn-success">
+                                        <i class="fas fa-download"></i> Emprunter ce livre
+                                    </a>
+                                    <a href="{{ route('reservations.create', ['book_id' => $book->id_livre]) }}" class="btn btn-primary">
+                                        <i class="fas fa-bookmark"></i> Réserver ce livre
                                     </a>
                                 </div>
-                            @endauth
+                            @else
+                                <div class="mt-3">
+                                    <p class="text-muted"><em>Connectez-vous pour emprunter ou réserver ce livre</em></p>
+                                </div>
+                            @endif
                         @else
                             <span class="badge bg-danger">Aucun exemplaire disponible</span>
                         @endif

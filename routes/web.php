@@ -28,6 +28,23 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Pages publiques (footer)
+Route::get('/about', function () {
+    return view('pages.about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('pages.contact');
+})->name('contact');
+
+Route::get('/terms', function () {
+    return view('pages.terms');
+})->name('terms');
+
+Route::get('/privacy', function () {
+    return view('pages.privacy');
+})->name('privacy');
+
 // ============================================================================
 // AUTHENTIFICATION - Routes de connexion et inscription
 // ============================================================================
@@ -65,11 +82,11 @@ Route::prefix('books')->name('books.')->group(function () {
     // Liste tous les livres avec pagination
     Route::get('/', [BookController::class, 'index'])->name('index');
     
+    // Recherche avancée de livres (AVANT la route show)
+    Route::get('/search', [BookController::class, 'search'])->name('search');
+    
     // Détails complets d'un livre
     Route::get('/{book}', [BookController::class, 'show'])->name('show');
-    
-    // Recherche avancée de livres
-    Route::get('/search', [BookController::class, 'search'])->name('search');
 });
 
 // Auteurs
@@ -189,6 +206,17 @@ Route::middleware(['auth'])->group(function () {
         
         // Statistiques des pénalités
         Route::get('/statistics', [PenaltyController::class, 'statistics'])->name('statistics');
+
+        // Paramètres des pénalités
+        Route::get('/settings', [PenaltyController::class, 'settings'])->name('settings');
+        Route::post('/settings', [PenaltyController::class, 'updateSettings'])->name('update-settings');
+
+        // Gestion des comptes bloqués
+        Route::get('/blocked-members', [PenaltyController::class, 'blockedMembers'])->name('blocked-members');
+        Route::post('/unblock/{membre}', [PenaltyController::class, 'unblockMember'])->name('unblock');
+
+        // Marquer comme payée
+        Route::post('/{penalty}/pay', [PenaltyController::class, 'markAsPaid'])->name('pay');
     });
 
     // ========================================================================
@@ -252,15 +280,24 @@ Route::middleware(['auth'])->group(function () {
     // GESTION DES EMPRUNTS (Membres + Admin)
     // ========================================================================
     
-    Route::prefix('loans')->name('loans.')->group(function () {
-        // Liste des emprunts (admin = tous, membre = ses emprunts)
-        Route::get('/', [LoanController::class, 'index'])->name('index');
+    Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
+        // Emprunter directement un livre sans formulaire
+        Route::get('/quick-borrow', [LoanController::class, 'quickBorrow'])->name('quick-borrow');
+        
+        // Formulaire de création (avec book_id optionnel)
+        Route::get('/create', [LoanController::class, 'create'])->name('create');
+        
+        // Liste des emprunts - Admin voit tous les emprunts
+        Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
+        
+        // Emprunts d'un membre spécifique (DOIT ÊTRE AVANT /{loan})
+        Route::get('/member/{membre}', [LoanController::class, 'memberLoans'])->name('member');
         
         // Détails complets d'un emprunt
         Route::get('/{loan}', [LoanController::class, 'show'])->name('show');
         
-        // Emprunts d'un membre spécifique
-        Route::get('/member/{membre}', [LoanController::class, 'memberLoans'])->name('member');
+        // Enregistrer un emprunt
+        Route::post('/', [LoanController::class, 'store'])->name('store');
         
         // Actions sur un emprunt (tous les utilisateurs auth)
         // Renouveler un emprunt (max 3 fois)
@@ -268,6 +305,31 @@ Route::middleware(['auth'])->group(function () {
         
         // Retourner un livre au système
         Route::post('/{loan}/return', [LoanController::class, 'returnBook'])->name('return');
+        
+        // Supprimer un emprunt
+        Route::delete('/{loan}', [LoanController::class, 'destroy'])->name('destroy');
+    });
+
+    // ========================================================================
+    // GESTION DES EMPRUNTS POUR LES MEMBRES (Voir leurs propres emprunts)
+    // ========================================================================
+    
+    Route::prefix('loans')->name('loans.')->group(function () {
+        // Liste des emprunts du membre connecté
+        Route::get('/', [LoanController::class, 'index'])->name('index');
+        
+        // Détails d'un emprunt
+        Route::get('/{loan}', [LoanController::class, 'show'])->name('show');
+        
+        // Actions sur un emprunt (tous les utilisateurs auth)
+        // Renouveler un emprunt (max 3 fois)
+        Route::post('/{loan}/renew', [LoanController::class, 'renewLoan'])->name('renew');
+        
+        // Retourner un livre au système
+        Route::post('/{loan}/return', [LoanController::class, 'returnBook'])->name('return');
+        
+        // Supprimer un emprunt
+        Route::delete('/{loan}', [LoanController::class, 'destroy'])->name('destroy');
     });
 
     // ========================================================================
@@ -275,11 +337,11 @@ Route::middleware(['auth'])->group(function () {
     // ========================================================================
     
     Route::prefix('reservations')->name('reservations.')->group(function () {
+        // Formulaire de création (avec book_id optionnel)
+        Route::get('/create', [ReservationController::class, 'create'])->name('create');
+        
         // Liste des réservations (admin = tous, membre = ses réservations)
         Route::get('/', [ReservationController::class, 'index'])->name('index');
-        
-        // Formulaire pour créer une réservation
-        Route::get('/create', [ReservationController::class, 'create'])->name('create');
         
         // Enregistrer une réservation
         Route::post('/', [ReservationController::class, 'store'])->name('store');

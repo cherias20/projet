@@ -1,83 +1,116 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'Détails de la Réservation - Admin')
+@section('title', 'Détails de la Réservation')
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h1><i class="fas fa-bookmark"></i> Détails de la Réservation</h1>
-    </div>
+<style>
+    :root {
+        --primary-blue: #1e3c72;
+        --secondary-blue: #2a5298;
+        --light-blue: #f0f4f8;
+        --text-dark: #2d3436;
+        --text-light: #636e72;
+        --border-color: #e0e6ed;
+    }
+
+    .detail-header { background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(30, 60, 114, 0.2); }
+    .detail-header h2 { margin: 0; font-size: 1.5rem; }
+
+    .info-section { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--border-color); box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05); }
+
+    .section-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-blue); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--light-blue); display: flex; align-items: center; gap: 10px; }
+
+    .info-row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--light-blue); }
+    .info-row:last-child { border-bottom: none; }
+
+    .info-label { font-weight: 700; color: var(--primary-blue); min-width: 150px; }
+    .info-value { color: var(--text-dark); font-weight: 500; }
+
+    .badge { display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
+    .badge-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+    .badge-warning { background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%); color: white; }
+    .badge-danger { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+
+    .action-buttons { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+
+    .btn-cancel { background: #d32f2f; color: white; padding: 0.75rem 1.75rem; border-radius: 8px; font-weight: 700; border: none; transition: all 0.3s ease; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-cancel:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3); }
+
+    .btn-back { background: var(--light-blue); color: var(--secondary-blue); padding: 0.75rem 1.75rem; border-radius: 8px; font-weight: 700; border: none; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-back:hover { background-color: var(--secondary-blue); color: white; text-decoration: none; }
+</style>
+
+<h1 style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 2rem;">
+    <i class="fas fa-bookmark"></i> Détails de la Réservation
+</h1>
+
+<div class="detail-header">
+    <h2>{{ $reservation->book->titre }}</h2>
+    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Réservé par {{ $reservation->membre->getFullName() }}</p>
 </div>
 
 <div class="row">
     <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5>Informations de la Réservation</h5>
+        <div class="info-section">
+            <div class="section-title">
+                <i class="fas fa-info-circle"></i> Informations Générales
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p>
-                            <strong>Livre:</strong><br>
-                            <a href="{{ route('admin.books.edit', $reservation->book) }}">
-                                {{ $reservation->book->titre }}
-                            </a>
-                        </p>
-                        <p>
-                            <strong>Membre:</strong><br>
-                            <a href="{{ route('admin.members.show', $reservation->membre) }}">
-                                {{ $reservation->membre->getFullName() }}
-                            </a>
-                        </p>
-                    </div>
-                    <div class="col-md-6">
-                        <p>
-                            <strong>Date de Réservation:</strong><br>
-                            {{ $reservation->date_reservation->format('d/m/Y') }}
-                        </p>
-                        <p>
-                            <strong>Position dans la File:</strong><br>
-                            <span class="badge bg-info">{{ $reservation->position }}</span>
-                        </p>
-                        <p>
-                            <strong>Statut:</strong><br>
-                            <span class="badge bg-{{ $reservation->statut === 'disponible' ? 'success' : ($reservation->statut === 'en_attente' ? 'warning' : 'danger') }}">
-                                {{ ucfirst($reservation->statut) }}
-                            </span>
-                        </p>
-                    </div>
-                </div>
+            <div class="info-row">
+                <span class="info-label">Livre</span>
+                <span class="info-value"><a href="{{ route('admin.books.show', $reservation->book) }}">{{ $reservation->book->titre }}</a></span>
             </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h5>Actions</h5>
+            <div class="info-row">
+                <span class="info-label">Membre</span>
+                <span class="info-value"><a href="{{ route('admin.members.show', $reservation->membre) }}">{{ $reservation->membre->getFullName() }}</a></span>
             </div>
-            <div class="card-body">
-                @if($reservation->statut !== 'annulee')
-                    <form method="POST" action="{{ route('reservations.cancel', $reservation) }}" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr?')">
-                            <i class="fas fa-times"></i> Annuler la Réservation
-                        </button>
-                    </form>
-                @else
-                    <p class="text-danger">Cette réservation est annulée.</p>
-                @endif
+            <div class="info-row">
+                <span class="info-label">Date de Réservation</span>
+                <span class="info-value">{{ $reservation->date_reservation->format('d/m/Y') }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Position dans la File</span>
+                <span class="info-value"><strong>#{{ $reservation->position }}</strong></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Statut</span>
+                <span class="info-value">
+                    @if($reservation->statut === 'disponible')
+                        <span class="badge badge-success">Disponible</span>
+                    @elseif($reservation->statut === 'en_attente')
+                        <span class="badge badge-warning">En Attente</span>
+                    @else
+                        <span class="badge badge-danger">Annulée</span>
+                    @endif
+                </span>
             </div>
         </div>
     </div>
 
     <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <a href="{{ route('admin.reservations.index') }}" class="btn btn-secondary btn-sm w-100 mb-2">
-                    <i class="fas fa-arrow-left"></i> Retour
-                </a>
+        @if($reservation->statut !== 'annulee')
+            <div class="info-section">
+                <div class="section-title">
+                    <i class="fas fa-cog"></i> Actions
+                </div>
+                <form action="{{ route('admin.reservations.cancel', $reservation) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr?');">
+                    @csrf
+                    <button type="submit" class="btn-cancel" style="width: 100%;">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                </form>
             </div>
-        </div>
+        @else
+            <div class="info-section">
+                <p class="text-danger"><i class="fas fa-info-circle"></i> Cette réservation est annulée.</p>
+            </div>
+        @endif
     </div>
 </div>
+
+<div class="action-buttons">
+    <a href="{{ route('admin.reservations.index') }}" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Retour à la Liste
+    </a>
+</div>
+
 @endsection

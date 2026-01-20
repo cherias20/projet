@@ -51,7 +51,8 @@ class AuthController extends Controller
 
         // Connexion réussie - Stocker en session
         Session::put('membre_id', $membre->id_membre);
-        Session::put('membre_nom', $membre->nom . ' ' . $membre->prenom);
+        $nomComplet = trim(($membre->prenom ?? '') . ' ' . ($membre->nom ?? ''));
+        Session::put('membre_nom', !empty($nomComplet) ? $nomComplet : 'Utilisateur');
         Session::put('membre_email', $membre->email);
         Session::put('membre_role', $membre->role);
         Session::put('is_admin', $membre->role === 'admin');

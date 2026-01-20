@@ -15,15 +15,14 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: #f8f9fa;
             color: #333;
         }
 
         /* Navigation */
         .navbar {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.98) 0%, rgba(118, 75, 162, 0.98) 100%) !important;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+            box-shadow: 0 4px 20px rgba(30, 60, 114, 0.25);
             padding: 1rem 0;
         }
 
@@ -83,7 +82,7 @@
 
         .btn-login {
             background: white;
-            color: #667eea;
+            color: #1e3c72;
             border: none;
             padding: 8px 20px;
             border-radius: 25px;
@@ -94,293 +93,399 @@
 
         .btn-login:hover {
             background: #f0f0f0;
-            color: #764ba2;
+            color: #2a5298;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transform: translateY(-2px);
         }
 
         /* Hero Section */
         .hero {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 120px 0;
+            padding: 150px 0;
             text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 40px;
-            opacity: 0.95;
-        }
-
-        .hero i {
-            margin-right: 10px;
-        }
-
-        /* Button Styles */
-        .btn-hero {
-            background: white;
-            border: none;
-            color: #667eea;
-            padding: 14px 35px;
-            font-weight: 600;
-            border-radius: 50px;
-            display: inline-block;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            margin: 10px;
-        }
-
-        .btn-hero:hover {
-            background: #f0f0f0;
-            color: #764ba2;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Features Section */
-        .features-section {
-            background: white;
-            padding: 80px 0;
-            margin-bottom: 60px;
-        }
-
-        .feature-card {
-            text-align: center;
-            padding: 30px 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            margin-bottom: 30px;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
-            border-color: #667eea;
-        }
-
-        .feature-card i {
-            font-size: 2.5rem;
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .feature-card p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* Stats Section */
-        .stats-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 60px 0;
-            margin-bottom: 60px;
-            border-radius: 10px;
-        }
-
-        .stat-box {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-weight: 500;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 80px 0;
-            text-align: center;
-            color: white;
-            margin-bottom: 60px;
-        }
-
-        .cta-section h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .cta-section p {
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            opacity: 0.95;
-        }
-
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
-            color: white;
-            padding: 0;
-            margin-top: 100px;
             position: relative;
             overflow: hidden;
         }
 
-        footer::before {
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            animation: slideInDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 50px;
+            opacity: 0.95;
+            animation: slideInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideInUp 0.8s ease 0.4s backwards;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button Styles */
+        .btn-primary-hero {
+            background: white;
+            border: none;
+            color: #1e3c72;
+            padding: 16px 40px;
+            font-weight: 700;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary-hero:hover {
+            background: #f0f0f0;
+            color: #2a5298;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary-hero {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 14px 38px;
+            font-weight: 700;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary-hero:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 30px;
+            text-align: center;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(30, 60, 114, 0.15);
+        }
+
+        .feature-card i {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 100px 0;
+            color: white;
+            margin: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .stat-box {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Categories Section */
+        .categories-section {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .category-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+            height: 5px;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
         }
 
-        footer::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
-            pointer-events: none;
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(30, 60, 114, 0.15);
         }
 
-        footer .footer-content {
-            padding: 80px 0 40px 0;
-            position: relative;
-            z-index: 1;
+        .category-icon {
+            font-size: 3rem;
+            color: #1e3c72;
+            margin-bottom: 20px;
         }
 
-        footer .footer-col {
-            margin-bottom: 40px;
-        }
-
-        footer h5 {
-            color: #667eea;
-            margin-bottom: 30px;
-            font-weight: 800;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            position: relative;
-            padding-bottom: 15px;
-        }
-
-        footer h5::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
-
-        footer i {
-            color: #667eea;
-            margin-right: 12px;
+        .category-card h4 {
+            color: #1e3c72;
+            font-weight: 700;
+            margin-bottom: 10px;
             font-size: 1.2rem;
         }
 
-        footer p {
-            color: #b0b0b0;
-            line-height: 1.9;
+        .category-card p {
+            color: #666;
             font-size: 0.95rem;
             margin: 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 50px;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 80px 0 30px 0;
+            margin-top: 0;
+            box-shadow: 0 -4px 20px rgba(30, 60, 114, 0.1);
+        }
+
+        footer h5 {
+            color: white;
+            margin-bottom: 25px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        footer h5 i {
+            margin-right: 10px;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
         }
 
         footer a {
-            color: #b0b0b0;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            display: block;
-            position: relative;
-            padding: 8px 0;
-            margin: 5px 0;
-        }
-
-        footer a::before {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 0;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-            transition: height 0.35s ease;
-            border-radius: 2px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 8px 0;
+            padding: 5px 0;
         }
 
         footer a:hover {
-            color: #667eea;
+            color: white;
             padding-left: 10px;
         }
 
-        footer a:hover::before {
-            height: 20px;
+        footer a i {
+            margin-right: 8px;
+            color: white;
         }
 
-        footer .list-unstyled li {
-            margin-bottom: 8px;
-        }
-
-        footer .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        footer .contact-item {
-            display: flex;
-            align-items: center;
-            color: #b0b0b0;
-            font-size: 0.95rem;
-        }
-
-        footer .contact-item i {
-            min-width: 25px;
-            color: #667eea;
+        footer .footer-col {
+            margin-bottom: 30px;
         }
 
         footer .footer-bottom {
-            padding: 30px 0;
-            border-top: 1px solid rgba(102, 126, 234, 0.15);
-            margin-top: 40px;
-            position: relative;
-            z-index: 1;
+            padding: 30px 0 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
             text-align: center;
-        }
-
-        footer .footer-bottom p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #808080;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         footer .social-links {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             margin-top: 25px;
             justify-content: center;
         }
@@ -392,53 +497,55 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
             transition: all 0.3s ease;
-            padding: 0 !important;
-            margin: 0 !important;
+            margin: 0;
+            padding: 0;
         }
 
         footer .social-links a:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
+            color: #1e3c72;
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        footer .social-links a::before {
-            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .hero {
-                padding: 60px 0;
-                margin-bottom: 40px;
+                padding: 80px 0;
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .hero p {
-                font-size: 1rem;
+                font-size: 1.2rem;
             }
 
-            .features-section {
-                padding: 40px 0;
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
             }
 
-            .stat-number {
+            .btn-primary-hero,
+            .btn-secondary-hero {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-title h2 {
                 font-size: 2rem;
             }
 
-            .cta-section {
-                padding: 40px 0;
+            .cta-section h2 {
+                font-size: 2rem;
             }
 
-            .cta-section h2 {
-                font-size: 1.8rem;
+            .stat-number {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -447,7 +554,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('books.index') }}">
+            <a class="navbar-brand" href="{{ route('home') }}">
                 <i class="fas fa-book-reader"></i> Bibliothèque
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -458,8 +565,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('books.index') }}">Catalogue</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('about') }}">À propos</a>
+                    </li>
                   
-                    
                     @if(session()->has('membre_id'))
                         <li class="nav-item dropdown ms-3">
                             <button class="btn btn-login dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -474,7 +583,7 @@
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('loans.index') }}">
+                                    <a class="dropdown-item" href="{{ route('admin.loans.index') }}">
                                         <i class="fas fa-exchange-alt"></i> Mes emprunts
                                     </a>
                                 </li>
@@ -515,14 +624,21 @@
     <!-- Hero Section -->
     <div class="hero">
         <div class="container">
-            <h1>
-                <i class="fas fa-book-open"></i> Bienvenue à la Bibliothèque
-            </h1>
-            <p>Découvrez notre collection exceptionnelle de livres</p>
-            <div>
-                <a href="{{ route('books.index') }}" class="btn-hero">
-                    <i class="fas fa-search"></i> Consulter le Catalogue
-                </a>
+            <div class="hero-content">
+                <h1>
+                    <i class="fas fa-book-open"></i> Découvrez Notre Bibliothèque
+                </h1>
+                <p>Explorez une collection exceptionnelle et trouvez vos prochains livres préférés</p>
+                <div class="hero-buttons">
+                    <a href="{{ route('books.index') }}" class="btn-primary-hero">
+                        <i class="fas fa-search"></i> Consulter le Catalogue
+                    </a>
+                    @if(!session()->has('membre_id'))
+                        <a href="{{ route('register') }}" class="btn-secondary-hero">
+                            <i class="fas fa-user-plus"></i> S'inscrire Gratuitement
+                        </a>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -530,26 +646,30 @@
     <!-- Features Section -->
     <div class="features-section">
         <div class="container">
+            <div class="section-title">
+                <h2>Pourquoi Nous Choisir ?</h2>
+                <p>Les avantages de notre plateforme</p>
+            </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="feature-card">
                         <i class="fas fa-book"></i>
-                        <h3>Large Collection</h3>
-                        <p>Des milliers de livres disponibles pour tous les goûts et tous les âges</p>
+                        <h3>5000+ Livres</h3>
+                        <p>Une collection diverse et complète pour tous les goûts et tous les âges</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
-                        <i class="fas fa-hand-holding-heart"></i>
-                        <h3>Emprunts Faciles</h3>
-                        <p>Empruntez rapidement et facilement vos livres préférés en quelques clics</p>
+                        <i class="fas fa-lightning-bolt"></i>
+                        <h3>Simple & Rapide</h3>
+                        <p>Empruntez et réservez vos livres en quelques clics seulement</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
-                        <i class="fas fa-calendar-check"></i>
-                        <h3>Gestion Simplifiée</h3>
-                        <p>Suivi des emprunts, réservations et renouvellement depuis votre compte</p>
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Disponible 24/7</h3>
+                        <p>Accédez à votre compte depuis n'importe quel appareil</p>
                     </div>
                 </div>
             </div>
@@ -557,31 +677,71 @@
     </div>
 
     <!-- Stats Section -->
-    <div class="container">
-        <div class="stats-section">
+    <div class="stats-section">
+        <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-box">
                         <div class="stat-number">5000+</div>
-                        <div class="stat-label">Livres Disponibles</div>
+                        <div class="stat-label">Livres</div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-box">
                         <div class="stat-number">1200+</div>
                         <div class="stat-label">Auteurs</div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-box">
                         <div class="stat-number">50+</div>
                         <div class="stat-label">Genres</div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-box">
                         <div class="stat-number">2000+</div>
-                        <div class="stat-label">Membres Actifs</div>
+                        <div class="stat-label">Membres</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="categories-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Catégories Populaires</h2>
+                <p>Explorez nos collections par genre</p>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="category-card">
+                        <i class="fas fa-book-open category-icon"></i>
+                        <h4>Romans</h4>
+                        <p>Histoires captivantes et émotionnantes</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="category-card">
+                        <i class="fas fa-flask category-icon"></i>
+                        <h4>Sciences</h4>
+                        <p>Découvrez le monde à travers la science</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="category-card">
+                        <i class="fas fa-lightbulb category-icon"></i>
+                        <h4>Développement</h4>
+                        <p>Améliorez vos compétences et connaissances</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="category-card">
+                        <i class="fas fa-child category-icon"></i>
+                        <h4>Jeunesse</h4>
+                        <p>Histoires magiques pour les enfants</p>
                     </div>
                 </div>
             </div>
@@ -591,22 +751,34 @@
     <!-- CTA Section -->
     <div class="cta-section">
         <div class="container">
-            <h2>Prêt à commencer ?</h2>
-            <p>Explorez notre catalogue complet et trouvez votre prochain livre</p>
-            <a href="{{ route('books.index') }}" class="btn-hero">
-                <i class="fas fa-arrow-right"></i> Commencer
-            </a>
+            <div class="cta-content">
+                <h2>Prêt à Commencer ?</h2>
+                <p>Rejoignez notre communauté de lecteurs passionnés</p>
+                @if(!session()->has('membre_id'))
+                    <div>
+                        <a href="{{ route('register') }}" class="btn-primary-hero">
+                            <i class="fas fa-user-plus"></i> S'inscrire Gratuitement
+                        </a>
+                    </div>
+                @else
+                    <div>
+                        <a href="{{ route('books.index') }}" class="btn-primary-hero">
+                            <i class="fas fa-arrow-right"></i> Commencer à Emprunter
+                        </a>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer>
-        <div class="container footer-content">
+        <div class="container">
             <div class="row">
                 <!-- About -->
                 <div class="col-md-4 footer-col">
                     <h5><i class="fas fa-book-reader"></i> Bibliothèque</h5>
-                    <p>Votre source de savoir et de découvertes littéraires depuis 2025. Nous proposons une collection exceptionnelle de livres pour tous les âges et tous les goûts.</p>
+                    <p>Votre source de savoir et de découvertes littéraires. Nous mettons à disposition une collection exceptionnelle de livres pour tous les âges.</p>
                 </div>
 
                 <!-- Quick Links -->
@@ -614,29 +786,27 @@
                     <h5><i class="fas fa-link"></i> Liens Rapides</h5>
                     <ul class="list-unstyled">
                         <li><a href="{{ route('books.index') }}"><i class="fas fa-chevron-right"></i> Catalogue</a></li>
-                        <li><a href="{{ route('authors.index') }}"><i class="fas fa-chevron-right"></i> Auteurs</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> À propos</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+                        <li><a href="{{ route('about') }}"><i class="fas fa-chevron-right"></i> À propos</a></li>
+                        <li><a href="{{ route('contact') }}"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        <li><a href="{{ route('terms') }}"><i class="fas fa-chevron-right"></i> Conditions</a></li>
                     </ul>
                 </div>
 
                 <!-- Contact -->
                 <div class="col-md-4 footer-col">
                     <h5><i class="fas fa-envelope"></i> Contact</h5>
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>info@bibliotheque.local</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <span>+1 (555) 123-4567</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>123 Rue des Livres</span>
-                        </div>
-                    </div>
+                    <p>
+                        <i class="fas fa-envelope"></i> 
+                        <a href="mailto:contact@bibliotheque.fr">contact@bibliotheque.fr</a>
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i> 
+                        <a href="tel:+33123456789">+33 1 23 45 67 89</a>
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i> 
+                        123 Rue de la Bibliothèque, 75001 Paris
+                    </p>
                 </div>
             </div>
 
@@ -648,10 +818,14 @@
                     <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <p style="margin-top: 20px;">&copy; 2025 Bibliothèque. Tous droits réservés. | Design professionnel</p>
+                <p style="margin-top: 20px;">&copy; 2025 Bibliothèque. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

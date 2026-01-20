@@ -15,53 +15,121 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .register-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
+            position: relative;
+            z-index: 2;
         }
 
         .register-card {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(30, 60, 114, 0.4);
             overflow: hidden;
+            animation: slideInUp 0.6s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .register-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 50px 30px;
             text-align: center;
+            position: relative;
+        }
+
+        .register-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .register-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .register-header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
         }
 
         .register-header i {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 15px;
             display: block;
+            position: relative;
+            z-index: 1;
         }
 
         .register-header p {
-            font-size: 0.95rem;
+            font-size: 1rem;
             opacity: 0.9;
             margin: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .register-body {
-            padding: 40px 30px;
+            padding: 40px;
         }
 
         .form-group {
@@ -69,24 +137,32 @@
         }
 
         .form-label {
-            color: #333;
-            font-weight: 600;
+            color: #1e3c72;
+            font-weight: 700;
             margin-bottom: 10px;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.95rem;
+        }
+
+        .form-label i {
+            color: #2a5298;
         }
 
         .form-control {
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 12px 15px;
+            border: 2px solid #e8eef5;
+            border-radius: 12px;
+            padding: 13px 16px;
             font-size: 0.95rem;
             transition: all 0.3s ease;
+            background: #f8f9fa;
         }
 
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #2a5298;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.1);
             outline: none;
         }
 
@@ -101,50 +177,86 @@
         }
 
         .terms-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
+            margin-bottom: 25px;
+            padding: 16px;
+            background: #f0f5fb;
+            border-radius: 12px;
+            border-left: 5px solid #2a5298;
         }
 
-        .terms-section input {
-            cursor: pointer;
-        }
-
-        .terms-section label {
-            color: #666;
-            font-size: 0.9rem;
+        .terms-section .form-check {
             margin-bottom: 0;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0;
+        }
+
+        .form-check-input {
+            border: 2px solid #e8eef5;
             cursor: pointer;
+            width: 20px;
+            height: 20px;
+            margin: 3px 0 0 0;
+            accent-color: #2a5298;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
-        .terms-section a {
-            color: #667eea;
+        .form-check-input:checked {
+            background-color: #2a5298;
+            border-color: #2a5298;
+            box-shadow: none;
+        }
+
+        .form-check-input:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 0.2rem rgba(42, 82, 152, 0.25);
+        }
+
+        .form-check-label {
+            color: #555;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            cursor: pointer;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        .form-check-label a {
+            color: #2a5298;
             text-decoration: none;
+            font-weight: 600;
         }
 
-        .terms-section a:hover {
+        .form-check-label a:hover {
             text-decoration: underline;
         }
 
         .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
             font-size: 1rem;
             width: 100%;
             transition: all 0.3s ease;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.25);
         }
 
         .btn-register:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 12px 30px rgba(30, 60, 114, 0.35);
             color: white;
         }
 
@@ -154,6 +266,7 @@
             position: relative;
             color: #999;
             font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .divider::before,
@@ -161,7 +274,7 @@
             content: '';
             position: absolute;
             top: 50%;
-            width: 35%;
+            width: 40%;
             height: 1px;
             background: #e0e0e0;
         }
@@ -176,56 +289,111 @@
 
         .login-link {
             text-align: center;
-            color: #666;
+            color: #555;
             font-size: 0.95rem;
         }
 
         .login-link a {
-            color: #667eea;
+            color: #2a5298;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.3s ease;
         }
 
         .login-link a:hover {
-            color: #764ba2;
+            color: #1e3c72;
+            text-decoration: underline;
         }
 
         .error-message {
-            color: #dc3545;
+            color: #d32f2f;
             font-size: 0.85rem;
-            margin-top: 5px;
+            margin-top: 8px;
             display: flex;
             align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: #ffebee;
+            border-radius: 8px;
+            border-left: 4px solid #d32f2f;
         }
 
         .error-message i {
-            margin-right: 5px;
+            flex-shrink: 0;
+        }
+
+        .error-alert {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            color: #c62828;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 5px solid #d32f2f;
+            display: flex;
+            gap: 12px;
+            animation: slideInDown 0.4s ease;
+        }
+
+        .error-alert i {
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+
+        .error-alert strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .error-alert ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 0.9rem;
+        }
+
+        .error-alert li {
+            margin-bottom: 3px;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .is-invalid {
-            border-color: #dc3545 !important;
+            border-color: #d32f2f !important;
+            background-color: #fffbfc !important;
         }
 
         @media (max-width: 480px) {
             .register-header {
-                padding: 30px 20px;
+                padding: 40px 25px;
             }
 
             .register-header h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
 
             .register-header i {
-                font-size: 2rem;
+                font-size: 2.8rem;
             }
 
             .register-body {
-                padding: 30px 20px;
+                padding: 30px 25px;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
             }
         }
     </style>
@@ -243,13 +411,16 @@
             <!-- Body -->
             <div class="register-body">
                 @if ($errors->any())
-                    <div style="background: #f8d7da; color: #721c24; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #dc3545;">
-                        <strong>Erreurs :</strong>
-                        <ul style="margin: 5px 0 0 0; padding-left: 20px; font-size: 0.85rem;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                    <div class="error-alert">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div>
+                            <strong>Erreurs d'inscription</strong>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 @endif
 
@@ -348,11 +519,11 @@
                                 required
                             >
                             <label class="form-check-label" for="terms">
-                                J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de confidentialité</a>
+                                J'accepte les <a href="{{ route('terms') }}">conditions d'utilisation</a> et la <a href="{{ route('privacy') }}">politique de confidentialité</a>
                             </label>
                         </div>
                         @error('terms')
-                            <div class="error-message">
+                            <div class="error-message" style="margin-top: 8px;">
                                 <i class="fas fa-times-circle"></i>
                                 {{ $message }}
                             </div>

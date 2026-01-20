@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -36,7 +36,7 @@
         }
 
         .login-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -85,8 +85,8 @@
         }
 
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #2a5298;
+            box-shadow: 0 0 0 0.2rem rgba(30, 60, 114, 0.25);
             outline: none;
         }
 
@@ -107,8 +107,8 @@
         }
 
         .form-check-input:checked {
-            background-color: #667eea;
-            border-color: #667eea;
+            background-color: #2a5298;
+            border-color: #2a5298;
         }
 
         .form-check-label {
@@ -124,7 +124,7 @@
         }
 
         .forgot-password a {
-            color: #667eea;
+            color: #2a5298;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
@@ -132,11 +132,11 @@
         }
 
         .forgot-password a:hover {
-            color: #764ba2;
+            color: #1e3c72;
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -151,7 +151,7 @@
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(30, 60, 114, 0.3);
             color: white;
         }
 
@@ -192,14 +192,14 @@
         }
 
         .signup-link a {
-            color: #667eea;
+            color: #2a5298;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .signup-link a:hover {
-            color: #764ba2;
+            color: #1e3c72;
         }
 
         .error-message {

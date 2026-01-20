@@ -21,13 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Définir les directives Blade personnalisées
-        Blade::if('auth', function () {
-            return AuthHelper::check();
-        });
-
-        Blade::if('guest', function () {
-            return !AuthHelper::check();
-        });
+        // Les directives Blade personnalisées ont été supprimées
+        // Utiliser session()->has('membre_id') directement dans les vues
     }
 }
